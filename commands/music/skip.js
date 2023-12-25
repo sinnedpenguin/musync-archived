@@ -46,7 +46,27 @@ module.exports = {
       return interaction.reply({ embeds: [noSongEmbed], ephemeral: true });
     }
 
-    if (player.queue.length > 0) {
+    const autoplayEnabled = player.get("autoplay");
+
+    if (autoplayEnabled) {
+      const members = voiceChannel.members.filter(m => !m.user.bot);
+      
+      if (members.size === 1 || !voteSkipEnabled) {
+        player.seek(player.queue.current.duration);
+
+        const skipEmbed = new EmbedBuilder()
+          .setColor(config.embedColor)
+          .setDescription(':fast_forward: | Skipped to the next song.')
+          .setFooter({ text: `/voteskip: ${voteSkipEnabled ? 'ON' : 'OFF'}` })
+          .setTimestamp();
+
+        return interaction.reply({ embeds: [skipEmbed] }).then(msg => {
+          setTimeout(() => msg.delete(), 5000);
+        });
+      }
+    }
+
+    if (player.queue.length > 0 || autoplayEnabled) {
       const members = voiceChannel.members.filter(m => !m.user.bot);
 
       if (members.size === 1 || !voteSkipEnabled) {

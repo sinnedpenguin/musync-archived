@@ -14,7 +14,7 @@ function logToFile(message) {
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('play')
-    .setDescription('Play a song/album/playlist from YouTube, Spotify, Deezer, or Apple Music.')
+    .setDescription('Play a song/album/playlist from YouTube, Spotify, Deezer, SoundCloud, or Apple Music.')
     .addStringOption((option) =>
       option.setName('query').setDescription('Title/URL/keyword(s)')
       .setRequired(true)
@@ -69,20 +69,12 @@ module.exports = {
       });
     }
 
-    if (query.startsWith("https://open.spotify.com/")) {
-      source = "sp";
-    } else {
-      source = "yt"
-    }
-
     const results = await interaction.client.manager.search(
       { 
         query: query, 
-        source: source, 
+        source: "yt" || "sp", 
       }
     );
-
-    console.log(results);
 
     if (!results.tracks || results.tracks.length === 0) {
       logToFile(`No results found for: "${query}".`);
@@ -126,7 +118,6 @@ module.exports = {
         .setDescription(`[${results.tracks[0].title}](${results.tracks[0].uri})`)
         .setThumbnail(results.tracks[0].thumbnail)
         .addFields(
-          { name: 'Duration', value: `**\`${formatDuration(results.tracks[0].duration)}\`**`, inline: true },
           { name: 'Added by', value: `<@${interaction.user.id}>`, inline: true }
         );
 

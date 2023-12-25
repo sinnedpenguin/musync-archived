@@ -10,7 +10,7 @@ module.exports = {
   async execute(interaction) {
     const player = interaction.client.manager.players.get(interaction.guild.id);
     const currentTrack = player.queue.current;
-    const currentTrackTitle = currentTrack.title || "N/A";
+    const currentTrackTitle = currentTrack && currentTrack.title ? currentTrack.title : "NA";
 
     if (!player || !player.queue.current) {
       return interaction.reply({ content: ':x: | There is no song currently playing!', ephemeral: true });

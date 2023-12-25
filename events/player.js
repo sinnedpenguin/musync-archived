@@ -68,7 +68,7 @@ client.manager.on("trackStuck", (player, track) => {
 
 client.manager.on("trackStart", async player => {
   const currentTrack = player.queue.current;
-  const currentTrackTitle = currentTrack.title || "N/A";
+  const currentTrackTitle = currentTrack && currentTrack.title ? currentTrack.title : "NA";
 
   logToFile(`${client.user.tag} started playing: "${currentTrackTitle}".`);
 
