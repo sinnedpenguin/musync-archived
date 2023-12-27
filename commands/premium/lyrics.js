@@ -18,18 +18,6 @@ module.exports = {
     const commandName = interaction.commandName;
     let query = interaction.options.getString('query');
 
-    if (!userId) {
-      const responseEmbed = new EmbedBuilder()
-        .setDescription(`:x: | Unable to identify user.`);
-
-      console.error("User ID is undefined");
-      await interaction.reply({
-        embeds: [responseEmbed],
-        ephemeral: true,
-      });
-      return;
-    }
-
     const hasVoted = await checkTopGGVote(userId);
 
     await interaction.deferReply();
@@ -40,7 +28,7 @@ module.exports = {
         .setDescription(`:unlock: | Unlock the \`${commandName}\` feature by casting your vote on \`Top.gg\`! Your vote unlocks access for \`12 hours\`!`)
         .addFields({
           name: 'Why Vote?',
-          value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`filters\`, \`lyrics\`, \`volume\`, and more—coming soon!\n\n✨ [Vote now!](${config.vote})`,
+          value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`autoplay\`, \`lyrics\`, \`volume\`, and more—coming soon!\n\n✨ [Vote now!](${config.vote})`,
         })
       
       await interaction.followUp({
@@ -81,7 +69,7 @@ module.exports = {
           .setDescription(`:x: | No results found for \`${query}\`.`)
           .setTimestamp();
     
-        await interaction.reply({ 
+        await interaction.followUp({ 
           embeds: [notFoundEmbed],
           ephemeral: true 
         });
@@ -95,7 +83,7 @@ module.exports = {
           .setDescription(':x: | Invalid query. Please provide a valid query.')
           .setTimestamp();
     
-        await interaction.reply({ 
+        await interaction.followUp({ 
           embeds: [invalidQueryEmbed],
           ephemeral: true 
         });
@@ -105,7 +93,7 @@ module.exports = {
           .setDescription(':x: | An error occurred while fetching lyrics. Please try again.')
           .setTimestamp();
     
-        await interaction.reply({ 
+        await interaction.followUp({ 
           embeds: [errorEmbed],
           ephemeral: true 
         });

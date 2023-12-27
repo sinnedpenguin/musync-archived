@@ -20,41 +20,31 @@ module.exports = {
     const voiceChannel = member.voice.channel;
     const volumeLevel = interaction.options.getInteger('level');
 
-    /* if (!userId) {
-      const responseEmbed = new EmbedBuilder()
-        .setDescription(`:x: | Unable to identify user.`);
-
-      console.error("User ID is undefined");
-      await interaction.reply({
-        embeds: [responseEmbed],
-        ephemeral: true,
-      });
-      return;
-    }
-
     const hasVoted = await checkTopGGVote(userId);
-    
+
+    await interaction.deferReply();
+
     if (!hasVoted) {
       const responseEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
         .setDescription(`:unlock: | Unlock the \`${commandName}\` feature by casting your vote on \`Top.gg\`! Your vote unlocks access for \`12 hours\`!`)
         .addFields({
           name: 'Why Vote?',
-          value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`filters\`, \`lyrics\`, \`volume\`, and more—coming soon!\n\n✨ [Vote now!](${config.vote})`,
+          value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`autoplay\`, \`lyrics\`, \`volume\`, and more—coming soon!\n\n✨ [Vote now!](${config.vote})`,
         })
       
-      await interaction.reply({
+      await interaction.followUp({
         embeds: [responseEmbed],
       });
       return;
-    } */
+    }
 
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
         .setDescription(':x: | You need to be in a voice channel to adjust the volume of music playback!')
 
-      return interaction.reply({
+      return interaction.followUp({
         embeds: [voiceChannelEmbed],
         ephemeral: true,
       });
@@ -67,7 +57,7 @@ module.exports = {
         .setColor(config.embedColor)
         .setDescription(':x: | You must be in the same voice channel to adjust the volume of music playback!');
   
-      return interaction.reply({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
+      return interaction.followUp({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
     }
 
     const player = interaction.client.manager.players.get(interaction.guild.id);
@@ -77,7 +67,7 @@ module.exports = {
         .setColor(config.embedColor)
         .setDescription(':x: | No songs are currently playing!');
 
-      return interaction.reply({ embeds: [noSongsEmbed], ephemeral: true });
+      return interaction.followUp({ embeds: [noSongsEmbed], ephemeral: true });
     }
 
     player.setVolume(volumeLevel);
@@ -87,6 +77,6 @@ module.exports = {
       .setDescription(`:sound: | Set volume to \`${volumeLevel}\`.`)
       .setTimestamp();
 
-    interaction.reply({ embeds: [volumeEmbed] });
+    interaction.followUp({ embeds: [volumeEmbed] });
   },
 };

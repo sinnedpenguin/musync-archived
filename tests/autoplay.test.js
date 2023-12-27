@@ -1,7 +1,7 @@
 require('dotenv').config();
 require('../lib/client');
 
-const { autoplay } = require('../events/player');
+const autoplay = require('../lib/autoplay');
 
 test('should play the next track in autoplay mode', async () => {
   const mockPlayer = {

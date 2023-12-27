@@ -41,8 +41,7 @@ module.exports = {
       return interaction.reply({ embeds: [noSongEmbed] , ephemeral: true });
     }
 
-    player.queue.sort(() => Math.random() - 0.5);
-    player.shuffle = true;
+    player.queue.shuffle();
 
     const shuffleStatusEmbed = new EmbedBuilder()
       .setColor(config.embedColor)

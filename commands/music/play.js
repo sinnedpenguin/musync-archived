@@ -1,15 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const formatDuration = require('format-duration');
 const checkTopGGVote = require('../../lib/topgg')
-const fs = require('fs');
-const path = require('path');
 const config = require('../../config.json');
-
-const logFilePath = path.join(__dirname, '../../logs.txt');
-
-function logToFile(message) {
-  fs.appendFileSync(logFilePath, `${new Date().toISOString()} - ${message}\n`, 'utf-8');
-}
+const logger = require('../../lib/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -23,10 +15,11 @@ module.exports = {
   async execute(interaction) {
     const userId = interaction.user.id;
     const query = interaction.options.getString('query');
+    const commandName = interaction.commandName;
+
+    logger.info(`"${userId}" executed "${commandName}" with query: "${query}".`);
 
     await interaction.deferReply();
-
-    logToFile(`User executed /play with query: "${query}".`);
 
     if (!interaction.member.voice.channel) {
       const voiceChannelEmbed = new EmbedBuilder()
@@ -40,10 +33,6 @@ module.exports = {
     }
 
     let player = interaction.client.manager.players.get(interaction.guild.id);
-
-    if (!userId) {
-      console.error("User ID is undefined");
-    }
     
     let volume = 90;
     
@@ -51,11 +40,9 @@ module.exports = {
     
     if (hasVoted) {
       volume = 100;
-      console.log(`User has voted. Setting volume to 100.`);
-      logToFile(`User has voted. Setting volume to 100.`);
+      logger.info(`"${userId}" has voted. Setting volume to "100".`);
     } else {
-      console.log(`User has not voted. Setting default volume to 90.`);
-      logToFile(`User has not voted. Setting default volume to 90.`);
+      logger.warn(`"${userId}" has not voted. Setting default volume to "90".`);
     }
 
     if (!player) {
@@ -77,7 +64,7 @@ module.exports = {
     );
 
     if (!results.tracks || results.tracks.length === 0) {
-      logToFile(`No results found for: "${query}".`);
+      logger.error(`No results found for ${userId}'s query: "${query}".`);
 
       const notFoundEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
@@ -115,7 +102,9 @@ module.exports = {
 
       const addedToQueueEmbed = new EmbedBuilder()
         .setTitle('Added to Queue')
-        .setDescription(`[${results.tracks[0].title}](${results.tracks[0].uri})`)
+        .setDescription(
+          `${results.tracks[0].sourceName === "spotify" ? `${results.tracks[0].title} - ${results.tracks[0].author}` : `${results.tracks[0].title}`}`
+        )
         .setThumbnail(results.tracks[0].thumbnail)
         .addFields(
           { name: 'Added by', value: `<@${interaction.user.id}>`, inline: true }

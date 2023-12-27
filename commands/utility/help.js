@@ -1,6 +1,8 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const config = require('../../config.json');
-const package = require('../../package.json')
+const package = require('../../package.json');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -8,21 +10,37 @@ module.exports = {
     .setDescription('Display available commands and bot info.'),
 
   execute(interaction) {
-    const commands = interaction.client.commands
-      .sort((a, b) => a.data.name.localeCompare(b.data.name))
-      .map(command => `\`${command.data.name}\``)
-      .join(', ');
+    const categories = {
+      'General': '',
+      'Music': '',
+      'Filters': '',
+      'Premium / Vote Required': '',
+    };
+
+    const commandFolders = fs.readdirSync(path.join(__dirname, '..', '..', 'commands'));
+    for (const folder of commandFolders) {
+      let category = folder.charAt(0).toUpperCase() + folder.slice(1);
+      category = (category === 'Utility') ? 'General' : category;
+      category = (category === 'Premium') ? 'Premium / Vote Required' : category;
+
+      const commandFiles = fs.readdirSync(path.join(__dirname, '..', '..', 'commands', folder)).filter(file => file.endsWith('.js'));
+      categories[category] = commandFiles.map(file => `\`${file.slice(0, -3)}\``).join(', ');
+    }
 
     const helpEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setTitle('Commands')
-      .setDescription(`${commands}`)
-      .addFields(
-        { name: ' ', value: ' ' },
-        { name: `Musync! v${package.version}`, value: `:copyright: [sinnedpenguin](${config.developer})` },
-        { name: ' ', value: `✨[Website](${config.website}) | [Support Server](${config.supportServer}) | [Vote](${config.vote}) | [Donate/Sponsor](${config.donate})` }
-      );
+      .setTitle('Commands');
 
+    for (const [category, commands] of Object.entries(categories)) {
+      helpEmbed.addFields({ name: category, value: commands });
+    }
+
+    helpEmbed.addFields(
+      { name: ' ', value: ' ' },
+      { name: `Musync! v${package.version}`, value: `:copyright: [sinnedpenguin](${config.developer})` },
+      { name: ' ', value: `✨[Website](${config.website}) | [Support Server](${config.supportServer}) | [Vote](${config.vote}) | [Donate/Sponsor](${config.donate})` }
+    );
+    
     interaction.reply({ embeds: [helpEmbed] });
   }
 };

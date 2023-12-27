@@ -3,49 +3,35 @@ const client = require('../lib/client');
 const formatDuration = require('format-duration');
 const filterManager = require('../lib/filterManager');
 const autoplay = require('../lib/autoplay');
-const fs = require('node:fs');
-const path = require('node:path');
-const config = require('../config.json')
-const logFilePath = path.join(__dirname, '../logs.txt');
-
-function logToFile(message) {
-  fs.appendFileSync(logFilePath, `${new Date().toISOString()} - ${message}\n`, 'utf-8');
-}
+const config = require('../config.json');
+const logger = require('../lib/logger');
 
 client.manager.on("nodeConnect", node => {
-  console.log(`Node "${node.options.identifier}" connected.`);
-  logToFile(`Node "${node.options.identifier}" connected.`);
+  logger.info(`Node "${node.options.identifier}" connected.`);
 })
 
 client.manager.on("nodeReconnect", node => {
-  console.log(`Node "${node.options.identifier}" reconnecting.`);
-  logToFile(`Node "${node.options.identifier}" reconnecting.`);
+  logger.warn(`Node "${node.options.identifier}" reconnecting.`);
 });
 
 client.manager.on("nodeDisconnect", node => {
-  console.log(`Node "${node.options.identifier}" disconnected.`);
-  logToFile(`Node "${node.options.identifier}" disconnected.`);
+  logger.error(`Node "${node.options.identifier}" disconnected.`);
 });
 
 client.manager.on("nodeError", (node, error) => {
-  console.log(`Node "${node.options.identifier}" encountered an error: ${error.message}.`);
-  logToFile(`Node "${node.options.identifier}" encountered an error: ${error.message}.`);
+  logger.error(`Node "${node.options.identifier}" encountered an error: ${error.message}.`);
 });
 
 client.manager.on("nodeDestroy", node => {
-  console.log(`Node "${node.options.identifier}" destroyed.`);
-  logToFile(`Node "${node.options.identifier}" destroyed.`);
+  logger.warn(`Node "${node.options.identifier}" destroyed.`);
 });
 
 client.manager.on("playerDestroy", player => {
-  const destroyTime = new Date().toLocaleString();
-
- console.log(`${destroyTime}. Player has been destroyed.`);
-  logToFile('Player has been destroyed.');
+ logger.warn('Player has been destroyed.');
 });
 
 client.manager.on("trackError", (player, track, payload) => {
-  logToFile(`An error occurred while playing the track: ${track.title}. Error: ${payload.error}.`);
+  logger.error(`An error occurred while playing the track: ${track.title}. Error: ${payload.error}.`);
 
   const channel = client.channels.cache.get(player.textChannel);
 
@@ -56,7 +42,7 @@ client.manager.on("trackError", (player, track, payload) => {
 });
 
 client.manager.on("trackStuck", (player, track) => {
-  logToFile(`Track got stuck: ${track.title}.`);
+  logger.error(`Track got stuck: ${track.title}.`);
 
   const channel = client.channels.cache.get(player.textChannel);
 
@@ -70,7 +56,7 @@ client.manager.on("trackStart", async player => {
   const currentTrack = player.queue.current;
   const currentTrackTitle = currentTrack && currentTrack.title ? currentTrack.title : "NA";
 
-  logToFile(`${client.user.tag} started playing: "${currentTrackTitle}".`);
+  logger.info(`${client.user.tag} started playing: "${currentTrackTitle}".`);
 
   const channel = client.channels.cache.get(player.textChannel);
 
@@ -115,7 +101,9 @@ client.manager.on("trackStart", async player => {
   const nowPlayingEmbed = new EmbedBuilder()
     .setColor(config.embedColor)
     .setTitle('Now Playing')
-    .setDescription(`[${currentTrackTitle}](${currentTrack.uri})`)
+    .setDescription(
+      `[${currentTrack.sourceName === "spotify" ? `${currentTrackTitle} - ${currentTrack.author}` : `${currentTrackTitle}`} ](${currentTrack.uri})`
+    )
     .setThumbnail(currentTrack.thumbnail)
     .addFields(
       { name: 'Requested by', value: `<@${currentTrack.requester || track.requester}>`, inline: true },
@@ -137,16 +125,13 @@ client.manager.on("queueEnd", async (player, track) => {
   if (autoplayEnabled) {
     await autoplay(player, track);
   } else {
-    const destroyTime = new Date().toLocaleString();
-
     if (player && player.state === "CONNECTED") {
       if (player.disconnectTimeout) {
         clearTimeout(player.disconnectTimeout);
       }
 
       player.disconnectTimeout = setTimeout(() => {
-        console.log(`${destroyTime}. Queue is empty.`);
-        logToFile(`Queue is empty.`);
+        logger.warn(`Queue is empty.`);
 
         const queueEmptyEmbed = new EmbedBuilder()
           .setColor(config.embedColor)
@@ -162,7 +147,6 @@ client.manager.on("queueEnd", async (player, track) => {
 });
 
 client.on("voiceStateUpdate", (oldState, newState) => {
-  const destroyTime = new Date().toLocaleString();
   const guildId = newState.guild.id;
   const player = client.manager.get(guildId);
 
@@ -184,8 +168,7 @@ client.on("voiceStateUpdate", (oldState, newState) => {
       if (alone || (!player.playing && player.queue.size === 0)) {
         player.disconnectTimeout = setTimeout(() => {
           if (alone) {
-            console.log(`${destroyTime}. No one left in the voice channel.`);
-            logToFile(`No one left in the voice channel.`);
+            logger.warn(`No one left in the voice channel.`);
 
             const aloneEmbed = new EmbedBuilder()
               .setColor(config.embedColor)
@@ -194,8 +177,7 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 
             channel.send({ embeds: [aloneEmbed] });
           } else {
-            console.log(`${destroyTime}. No activity.`);
-            logToFile(`No activity.`);
+            logger.warn(`No activity.`);
 
             const noActivityEmbed = new EmbedBuilder()
               .setColor(config.embedColor)
@@ -212,7 +194,3 @@ client.on("voiceStateUpdate", (oldState, newState) => {
 });
 
 client.on("raw", d => client.manager.updateVoiceState(d))
-
-module.exports = {
-  autoplay,
-};

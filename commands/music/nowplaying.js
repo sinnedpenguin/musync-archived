@@ -56,7 +56,9 @@ module.exports = {
     const nowPlayingEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setTitle('Now Playing')
-      .setDescription(`[${currentTrackTitle}](${player.queue.current.uri})`)
+      .setDescription(
+        `[${currentTrack.sourceName === "spotify" ? `${currentTrackTitle} - ${currentTrack.author}` : `${currentTrackTitle}`} ](${currentTrack.uri})`
+      )
       .setThumbnail(player.queue.current.thumbnail)
       .addFields(
         { name: 'Requested by', value: `<@${currentTrack.requester}>`, inline: true },
