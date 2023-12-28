@@ -6,7 +6,7 @@ const logger = require('../../lib/logger');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('autoplay')
-    .setDescription('Toggle autoplay. Automatically adds and plays songs to the queue.'),
+    .setDescription('Toggle autoplay. Automatically adds and plays similar songs to the queue.'),
   async execute(interaction) {
     const userId = interaction.user.id;
     const commandName = interaction.commandName;
@@ -25,8 +25,8 @@ module.exports = {
         .setDescription(`:unlock: | Unlock the \`${commandName}\` feature by casting your vote on \`Top.gg\`! Your vote unlocks access for \`12 hours\`!`)
         .addFields({
           name: 'Why Vote?',
-          value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`autoplay\`, \`lyrics\`, \`volume\`, and more—coming soon!\n\n✨ [Vote now!](${config.vote})`,
-        })
+          value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`autoplay\`, \`filters\`, \`lyrics\`, \`volume\`, and more—coming soon!\n\n✨ [Vote now!](${config.vote})`,
+        });
       
       await interaction.followUp({
         embeds: [responseEmbed],
@@ -43,7 +43,7 @@ module.exports = {
         embeds: [voiceChannelEmbed],
         ephemeral: true,
       });
-    }
+    };
 
     let player = interaction.client.manager.players.get(interaction.guild.id);
 

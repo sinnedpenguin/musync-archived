@@ -14,14 +14,13 @@ module.exports = {
       'General': '',
       'Music': '',
       'Filters': '',
-      'Premium / Vote Required': '',
+      'Advanced': '',
     };
 
     const commandFolders = fs.readdirSync(path.join(__dirname, '..', '..', 'commands'));
     for (const folder of commandFolders) {
       let category = folder.charAt(0).toUpperCase() + folder.slice(1);
       category = (category === 'Utility') ? 'General' : category;
-      category = (category === 'Premium') ? 'Premium / Vote Required' : category;
 
       const commandFiles = fs.readdirSync(path.join(__dirname, '..', '..', 'commands', folder)).filter(file => file.endsWith('.js'));
       categories[category] = commandFiles.map(file => `\`${file.slice(0, -3)}\``).join(', ');

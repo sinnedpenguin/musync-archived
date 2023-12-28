@@ -1,16 +1,38 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const checkTopGGVote = require('../../lib/topgg');
 const config = require('../../config.json');
+const logger = require('../../lib/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('filter-vibrato')
     .setDescription('Toggle Vibrato filter.'),
   async execute(interaction) {
+    const userId = interaction.user.id;
     const member = interaction.member;
     const voiceChannel = member.voice.channel;
     const commandName = interaction.commandName;
 
+    const hasVoted = await checkTopGGVote(userId);
+
     await interaction.deferReply();
+
+    if (!hasVoted) {
+      logger.error(`"${userId}" has not voted to use "${commandName}".`);
+      
+      const responseEmbed = new EmbedBuilder()
+        .setColor(config.embedColor)
+        .setDescription(`:unlock: | Unlock the \`${commandName}\` feature by casting your vote on \`Top.gg\`! Your vote unlocks access for \`12 hours\`!`)
+        .addFields({
+          name: 'Why Vote?',
+          value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`autoplay\`, \`filters\`, \`lyrics\`, \`volume\`, and more—coming soon!\n\n✨ [Vote now!](${config.vote})`,
+        });
+      
+      await interaction.followUp({
+        embeds: [responseEmbed],
+      });
+      return;
+    };
 
     const player = interaction.client.manager.players.get(interaction.guild.id);
 
