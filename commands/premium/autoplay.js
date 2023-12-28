@@ -1,12 +1,12 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const checkTopGGVote = require('../../lib/topgg')
+const checkTopGGVote = require('../../lib/topgg');
 const config = require('../../config.json');
 const logger = require('../../lib/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('autoplay')
-    .setDescription('Toggle autoplay. When enabled, automatically adds and plays songs to the queue.'),
+    .setDescription('Toggle autoplay. Automatically adds and plays songs to the queue.'),
   async execute(interaction) {
     const userId = interaction.user.id;
     const commandName = interaction.commandName;

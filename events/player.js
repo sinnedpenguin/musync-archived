@@ -36,7 +36,7 @@ client.manager.on("trackError", (player, track, payload) => {
   const channel = client.channels.cache.get(player.textChannel);
 
   channel.send({
-    content: `:x: | An error occurred while playing the track. Please try again later. Error: ${payload.error}.`,
+    content: `:x: | An error occurred while playing the track. Please try again later. Error: \`${payload.error}\`.`,
     ephemeral: true
   });
 });
@@ -47,7 +47,7 @@ client.manager.on("trackStuck", (player, track) => {
   const channel = client.channels.cache.get(player.textChannel);
 
   channel.send({
-    content: `:x: | An error occurred while playing the track. Please try again later. Track got stuck: ${track.title}.`,
+    content: `:x: | An error occurred while playing the track: \`${track.title}\`. Please try again later.`,
     ephemeral: true
   });
 });
@@ -56,7 +56,7 @@ client.manager.on("trackStart", async player => {
   const currentTrack = player.queue.current;
   const currentTrackTitle = currentTrack && currentTrack.title ? currentTrack.title : "NA";
 
-  logger.info(`${client.user.tag} started playing: "${currentTrackTitle}".`);
+  logger.info(`"${client.user.tag}" started playing: "${currentTrackTitle}".`);
 
   const channel = client.channels.cache.get(player.textChannel);
 
@@ -193,4 +193,4 @@ client.on("voiceStateUpdate", (oldState, newState) => {
   }
 });
 
-client.on("raw", d => client.manager.updateVoiceState(d))
+client.on("raw", d => client.manager.updateVoiceState(d));

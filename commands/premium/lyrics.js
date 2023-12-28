@@ -1,8 +1,9 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { Rlyrics } = require("rlyrics");
 const rlyrics = new Rlyrics();
-const checkTopGGVote = require('../../lib/topgg')
+const checkTopGGVote = require('../../lib/topgg');
 const config = require('../../config.json');
+const logger = require('../../lib/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -18,11 +19,15 @@ module.exports = {
     const commandName = interaction.commandName;
     let query = interaction.options.getString('query');
 
+    logger.info(`"${userId}" executed "${commandName}".`);
+
     const hasVoted = await checkTopGGVote(userId);
 
     await interaction.deferReply();
 
     if (!hasVoted) {
+      logger.error(`"${userId}" has not voted to use "${commandName}".`);
+      
       const responseEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
         .setDescription(`:unlock: | Unlock the \`${commandName}\` feature by casting your vote on \`Top.gg\`! Your vote unlocks access for \`12 hours\`!`)
