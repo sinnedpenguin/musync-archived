@@ -4,6 +4,7 @@
   "supportServer": "https://discord.com/invite/yQxpgFdC6n",
   "vote": "https://top.gg/bot/1182507989576458352/vote",
   "donate": "https://ko-fi.com/sinnedpenguin",
+  "invite": "https://discord.com/oauth2/authorize?client_id=1182507989576458352&permissions=3173376&scope=applications.commands+bot",
   "embedColor": "#F04747",
   "disconnectTime": 30000
 }

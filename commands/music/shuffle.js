@@ -42,10 +42,11 @@ module.exports = {
     }
 
     player.queue.shuffle();
+    player.queue.isShuffled = true;
 
     const shuffleStatusEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(':twisted_rightwards_arrows: | The queue has been shuffled.')
+      .setDescription(':twisted_rightwards_arrows: | The queue has been shuffled! Use `/queue` to see the current order.')
       .setTimestamp();
 
     interaction.reply({

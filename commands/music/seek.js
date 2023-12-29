@@ -66,7 +66,7 @@ module.exports = {
       player.seek(timeInSeconds * 1000); 
       const successEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`⏩ | Seeked to \`${formatDuration(timeInSeconds * 1000)}\``)
+        .setDescription(`⏩ | Seeked to \`${formatDuration(timeInSeconds * 1000)}\`.`)
         .setTimestamp();
       return interaction.reply({
         embeds: [successEmbed],

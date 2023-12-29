@@ -37,7 +37,7 @@ module.exports = {
     helpEmbed.addFields(
       { name: ' ', value: ' ' },
       { name: `Musync! v${package.version}`, value: `:copyright: [sinnedpenguin](${config.developer})` },
-      { name: ' ', value: `✨[Website](${config.website}) | [Support Server](${config.supportServer}) | [Vote](${config.vote}) | [Donate/Sponsor](${config.donate})` }
+      { name: ' ', value: `✨ [Website](${config.website}) | [Support Server](${config.supportServer}) | [Vote](${config.vote}) | [Donate/Sponsor](${config.donate}) | [Invite](${config.invite})` }
     );
     
     interaction.reply({ embeds: [helpEmbed] });

@@ -64,7 +64,7 @@ module.exports = {
 
     const filterEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:white_check_mark: | **Filter - Vaporwave**: \`${player.filters.vaporwave ? 'ON' : 'OFF'}\`.`)
+      .setDescription(`:white_check_mark: | \`Vaporwave\` filter is now ${player.filters.vaporwave ? '\`enabled\`' : '\`disabled\`'}! Use \`/nowplaying\` to see all enabled filters.`)
       .setTimestamp();
 
     interaction.followUp({

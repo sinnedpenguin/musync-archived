@@ -37,7 +37,7 @@ module.exports = {
       filtersField.push('Nightcore');
     }
 
-    if (player.filters.lowpass) {
+    if (player.filters.lowPass) {
       filtersField.push('Soft');
     }
 

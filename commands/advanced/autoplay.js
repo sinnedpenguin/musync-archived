@@ -32,7 +32,7 @@ module.exports = {
         embeds: [responseEmbed],
       });
       return;
-    }
+    };
 
     if (!interaction.member.voice.channel) {
       const voiceChannelEmbed = new EmbedBuilder()
@@ -54,7 +54,7 @@ module.exports = {
 
     const autoPlayEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(player.get(`autoplay`) ? ':white_check_mark: | **Autoplay**: `ON`.' : ':white_check_mark: | **Autoplay** `OFF`.')
+      .setDescription(`:white_check_mark: | \`Autoplay\` is now \`${player.get('autoplay') ? 'ON' : 'OFF'}\`! Use \`/nowplaying\` to see the current status.`)
       .setTimestamp();
 
     return interaction.followUp({

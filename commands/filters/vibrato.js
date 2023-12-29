@@ -64,7 +64,7 @@ module.exports = {
 
     const filterEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:white_check_mark: | **Filter - Vibrato**: \`${player.filters.vibrato ? 'ON' : 'OFF'}\`.`)
+      .setDescription(`:white_check_mark: | \`Vibrato\` filter is now ${player.filters.vibrato ? '\`enabled\`' : '\`disabled\`'}! Use \`/nowplaying\` to see all enabled filters.`)
       .setTimestamp();
 
     interaction.followUp({

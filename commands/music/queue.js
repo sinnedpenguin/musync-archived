@@ -49,8 +49,17 @@ module.exports = {
         { name: 'Now Playing', value: nowPlaying ? `${nowPlaying.title} - **\`${formatDuration(nowPlaying.duration)}\`** - <@${nowPlaying.requester}>` : 'None' }
       );
 
+
+    const totalDuration = player.queue.reduce((acc, track) => acc + track.duration, 0) + (nowPlaying ? nowPlaying.duration : 0);
+    const formattedTotalDuration = formatDuration(totalDuration);
+      
     if (player.queue.length >= 1) { 
-      queueEmbed.addFields({ name: 'Upcoming', value: `${queueString}` });
+      queueEmbed.addFields(
+        { name: 'Upcoming', value: `${queueString}` },
+        { name: 'Total Duration', value: `**\`${formattedTotalDuration}\`**`, inline: true },
+        { name: 'Queue Repeat', value: `**\`${player.queueRepeat ? 'ON' : 'OFF'}\`**`, inline: true },
+        { name: 'Shuffled?', value: `**\`${player.queue.isShuffled ? 'YES' : 'NO'}\`**`, inline: true }
+      );
     }
 
     queueEmbed.setFooter({ text: `Page ${page} of ${totalPages}` });

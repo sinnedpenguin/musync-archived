@@ -81,18 +81,17 @@ module.exports = {
         });
     }
 
-    let repeatMode;
-    if (player.queueRepeat) {
-      repeatMode = 'QUEUE';
-    } else if (player.trackRepeat) {
-      repeatMode = 'SONG';
+    let repeatModeMessage;
+
+    if (player.trackRepeat) {
+      repeatModeMessage = `:repeat: | \`Song\` repeat: ${player.trackRepeat ? '\`ON\`' : '\`OFF\`'}. Use \`/nowplaying\` to see the current status.`;
     } else {
-      repeatMode = 'OFF';
-    }
+      repeatModeMessage = `:repeat: | \`Queue\` repeat: ${player.queueRepeat ? '\`ON\`' : '\`OFF\`'}. Use \`/queue\` to see the current status.`;
+    } 
 
     const repeatModeEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:repeat: | Repeat: \`${repeatMode}\`.`)
+      .setDescription(`${repeatModeMessage}`)
       .setTimestamp();
 
     interaction.reply({

@@ -64,7 +64,7 @@ module.exports = {
 
     const filterEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:white_check_mark: | **Filter - Soft**: \`${player.filters.lowPass ? 'ON' : 'OFF'}\`.`)
+      .setDescription(`:white_check_mark: | \`Soft\` filter is now ${player.filters.lowPass ? '\`enabled\`' : '\`disabled\`'}! Use \`/nowplaying\` to see all enabled filters.`)
       .setTimestamp();
 
     interaction.followUp({

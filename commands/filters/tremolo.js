@@ -64,7 +64,7 @@ module.exports = {
 
     const filterEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:white_check_mark: | **Filter - Tremolo**: \`${player.filters.tremolo ? 'ON' : 'OFF'}\`.`)
+      .setDescription(`:white_check_mark: | \`Tremolo\` filter is now ${player.filters.tremolo ? '\`enabled\`' : '\`disabled\`'}! Use \`/nowplaying\` to see all enabled filters.`)
       .setTimestamp();
 
     interaction.followUp({

@@ -79,7 +79,7 @@ module.exports = {
     
     const volumeEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:sound: | Set volume to \`${volumeLevel}\`.`)
+      .setDescription(`:sound: | Set volume to \`${volumeLevel}\`. Use \`/nowplaying\` to see the current volume.`)
       .setTimestamp();
 
     interaction.followUp({ embeds: [volumeEmbed] });

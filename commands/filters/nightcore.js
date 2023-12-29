@@ -64,7 +64,7 @@ module.exports = {
 
     const filterEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:white_check_mark: | **Filter - Nightcore**: \`${player.filters.nightcore ? 'ON' : 'OFF'}\`.`)
+      .setDescription(`:white_check_mark: | \`Nightcore\` filter is now ${player.filters.karaoke ? '\`enabled\`' : '\`disabled\`'}! Use \`/nowplaying\` to see all enabled filters.`)
       .setTimestamp();
 
     interaction.followUp({

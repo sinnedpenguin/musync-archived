@@ -64,7 +64,7 @@ module.exports = {
 
     const filterEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:white_check_mark: | **Filter - Karaoke**: \`${player.filters.karaoke ? 'ON' : 'OFF'}\`.`)
+      .setDescription(`:white_check_mark: | \`Karaoke\` filter is now ${player.filters.karaoke ? '\`enabled\`' : '\`disabled\`'}! Use \`/nowplaying\` to see all enabled filters.`)
       .setTimestamp();
 
     interaction.followUp({

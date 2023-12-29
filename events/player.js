@@ -82,7 +82,7 @@ client.manager.on("trackStart", async player => {
     filtersField.push('Nightcore');
   }
 
-  if (player.filters.lowpass) {
+  if (player.filters.lowPass) {
     filtersField.push('Soft');
   }
 
@@ -130,18 +130,16 @@ client.manager.on("queueEnd", async (player, track) => {
         clearTimeout(player.disconnectTimeout);
       }
 
-      player.disconnectTimeout = setTimeout(() => {
-        logger.warn(`Queue is empty.`);
+      logger.info(`Queue concluded.`);
 
-        const queueEmptyEmbed = new EmbedBuilder()
-          .setColor(config.embedColor)
-          .setDescription(`:warning: | Left the voice channel as the queue is empty.`)
-          .setTimestamp();
+      const queueEmptyEmbed = new EmbedBuilder()
+        .setColor(config.embedColor)
+        .setDescription(`:white_check_mark: | Queue concluded! Enjoying \`Musnyc!\`? Please consider:\n\n✨ [Support Server](${config.supportServer}) | [Vote](${config.vote}) | [Donate/Sponsor](${config.donate}) | [Invite](${config.invite})`)
+        .setTimestamp();
 
-        const channel = client.channels.cache.get(player.textChannel);
-        channel.send({ embeds: [queueEmptyEmbed] });
-        player.destroy();
-      }, config.disconnectTime);
+      const channel = client.channels.cache.get(player.textChannel);
+      channel.send({ embeds: [queueEmptyEmbed] });
+      player.destroy();
     }
   }
 });

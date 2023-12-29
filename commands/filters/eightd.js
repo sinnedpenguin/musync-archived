@@ -34,6 +34,7 @@ module.exports = {
       return;
     };
 
+
     const player = interaction.client.manager.players.get(interaction.guild.id);
 
     if (!player || !player.queue.current) {
@@ -64,7 +65,7 @@ module.exports = {
 
     const filterEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:white_check_mark: | **Filter - 8D**: \`${player.filters.rotating ? 'ON' : 'OFF'}\`.`)
+      .setDescription(`:white_check_mark: | \`8D\` filter is now ${player.filters.rotating ? '\`enabled\`' : '\`disabled\`'}! Use \`/nowplaying\` to see all enabled filters.`)
       .setTimestamp();
 
     interaction.followUp({

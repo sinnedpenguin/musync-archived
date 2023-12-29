@@ -64,7 +64,7 @@ module.exports = {
 
     const resetFilterEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(':white_check_mark: | Filter have been reset.')
+      .setDescription(':white_check_mark: | Filters have been reset. Use `/nowplaying` to see the changes.')
       .setTimestamp();
 
     interaction.followUp({
