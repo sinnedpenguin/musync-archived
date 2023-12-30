@@ -25,7 +25,7 @@ module.exports = {
     if (!player) {
       const notInChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | Not in a voice channel.')
+        .setDescription(':x: | Currently not in a voice channel.')
 
       return interaction.reply({ embeds: [notInChannelEmbed], ephemeral: true });
     }

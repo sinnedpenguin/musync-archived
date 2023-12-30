@@ -9,12 +9,17 @@ module.exports = {
     .setDescription('Display the currently playing song.'),
   async execute(interaction) {
     const player = interaction.client.manager.players.get(interaction.guild.id);
+
+    if (!player || !player.queue || !player.queue.current) {
+      const noSongEmbed = new EmbedBuilder()
+        .setColor(config.embedColor)
+        .setDescription(':x: | There is no song currently playing! Use </play:1190439304183414879> to play a song!')
+
+      return interaction.reply({ embeds: [noSongEmbed], ephemeral: true });
+    }
+
     const currentTrack = player.queue.current;
     const currentTrackTitle = currentTrack && currentTrack.title ? currentTrack.title : "NA";
-
-    if (!player || !player.queue.current) {
-      return interaction.reply({ content: ':x: | There is no song currently playing!', ephemeral: true });
-    }
 
     const repeatMode = player.trackRepeat ? 'ON' : 'OFF';
     const bassBoostStatus = filterManager.getBassBoostStatus();
