@@ -17,7 +17,7 @@ module.exports = {
 
     await interaction.deferReply();
 
-    if (!hasVoted) {
+    /* if (!hasVoted) {
       logger.error(`"${userId}" has not voted to use "${commandName}".`);
       
       const responseEmbed = new EmbedBuilder()
@@ -32,7 +32,7 @@ module.exports = {
         embeds: [responseEmbed],
       });
       return;
-    };
+    } */
 
     const player = interaction.client.manager.players.get(interaction.guild.id);
 
@@ -64,7 +64,7 @@ module.exports = {
 
     const resetFilterEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(':white_check_mark: | Filters have been reset. Use `/nowplaying` to see the changes.')
+      .setDescription(':white_check_mark: | Filters have been reset. Use </nowplaying:1190439304183414877> to see the changes.')
       .setTimestamp();
 
     interaction.followUp({

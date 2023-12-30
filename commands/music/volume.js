@@ -27,7 +27,7 @@ module.exports = {
 
     await interaction.deferReply();
 
-    if (!hasVoted) {
+    /* if (!hasVoted) {
       logger.error(`"${userId}" has not voted to use "${commandName}".`);
       
       const responseEmbed = new EmbedBuilder()
@@ -42,7 +42,7 @@ module.exports = {
         embeds: [responseEmbed],
       });
       return;
-    };
+    } */
 
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
@@ -79,7 +79,7 @@ module.exports = {
     
     const volumeEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:sound: | Set volume to \`${volumeLevel}\`. Use \`/nowplaying\` to see the current volume.`)
+      .setDescription(`:sound: | Set volume to \`${volumeLevel}\`. Use </nowplaying:1190439304183414877> to see the current volume.`)
       .setTimestamp();
 
     interaction.followUp({ embeds: [volumeEmbed] });

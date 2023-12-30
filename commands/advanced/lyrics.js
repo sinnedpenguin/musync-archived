@@ -25,7 +25,7 @@ module.exports = {
 
     await interaction.deferReply();
 
-    if (!hasVoted) {
+    /* if (!hasVoted) {
       logger.error(`"${userId}" has not voted to use "${commandName}".`);
       
       const responseEmbed = new EmbedBuilder()
@@ -40,7 +40,7 @@ module.exports = {
         embeds: [responseEmbed],
       });
       return;
-    };
+    } */
 
     try {
       const encodedQuery = encodeURIComponent(query);

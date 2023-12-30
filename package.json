@@ -3,7 +3,6 @@
   "version": "1.2.1",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
     "deploy": "node ./deployCommands.js"
   },
   "author": "sinnedpenguin",
@@ -21,12 +20,13 @@
     "erela.js-deezer": "^1.0.7",
     "erela.js-filters": "^1.2.7",
     "format-duration": "^3.0.2",
+    "magmastream": "^2.2.4",
     "pino": "^8.17.1",
     "pino-pretty": "^10.3.0",
     "rlyrics": "^2.0.1",
     "topgg-autoposter": "^2.0.1"
   },
   "devDependencies": {
-    "jest": "^29.7.0"
+    "eslint": "^8.56.0"
   }
 }

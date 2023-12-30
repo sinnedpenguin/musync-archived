@@ -24,7 +24,7 @@ module.exports = {
     if (!interaction.member.voice.channel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You need to be in a voice channel to play a song!');
+        .setDescription(':x: | You need to be in a voice channel to </play:1190439304183414879> a song!');
 
       return interaction.followUp({
         embeds: [voiceChannelEmbed],

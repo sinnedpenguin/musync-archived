@@ -26,7 +26,7 @@ module.exports = {
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You need to be in a voice channel to move a song from the queue!')
+        .setDescription(':x: | You need to be in a voice channel to move a song from the </queue:1190439304183414881>!')
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
@@ -39,7 +39,7 @@ module.exports = {
     if (!sameVoiceChannel || voiceChannel.id !== sameVoiceChannel.id) {
       const sameVoiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You must be in the same voice channel to move a song from the queue!');
+        .setDescription(':x: | You must be in the same voice channel to move a song from the </queue:1190439304183414881>!');
   
       return interaction.reply({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
     }
@@ -55,7 +55,7 @@ module.exports = {
     if (currentPosition > player.queue.length || newPosition > player.queue.length || currentPosition < 1 || newPosition < 1) {
       const invalidNumberEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | Invalid song positions. Please enter valid positions in the queue.');
+        .setDescription(':x: | Invalid song positions. Please enter valid positions in the </queue:1190439304183414881>.');
 
       return interaction.reply({ embeds: [invalidNumberEmbed], ephemeral: true });
     }
@@ -68,7 +68,7 @@ module.exports = {
 
     const moveEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:arrow_double_up: | Moved song from position ${currentPosition} to ${newPosition}. [${movedSong.title}](${movedSong.uri}).`)
+      .setDescription(`:arrow_double_up: | Moved [${movedSong.title}](${movedSong.uri}) from position ${currentPosition} to ${newPosition}. Use </queue:1190439304183414881> to see the current order.`)
       .setTimestamp();
 
     interaction.reply({ embeds: [moveEmbed] });

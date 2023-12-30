@@ -13,7 +13,7 @@ module.exports = {
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You need to be in a voice channel to go back to the previous song!');
+        .setDescription(':x: | You need to be in a voice channel to go back to the </previous:1190439304183414880> song!');
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
@@ -26,7 +26,7 @@ module.exports = {
     if (!sameVoiceChannel || voiceChannel.id !== sameVoiceChannel.id) {
       const sameVoiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You must be in the same voice channel to go back to the previous song!');
+        .setDescription(':x: | You must be in the same voice channel to go back to the </previous:1190439304183414880> song!');
   
       return interaction.reply({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
     }
@@ -36,7 +36,7 @@ module.exports = {
     if (!player || !player.queue.previous) {
       const noPreviousEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | There is no previous song to go back to!');
+        .setDescription(':x: | There is no </previous:1190439304183414880> song to go back to!');
 
       return interaction.reply({ 
         embeds: [noPreviousEmbed], 
@@ -56,7 +56,7 @@ module.exports = {
 
     const previousEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(':rewind: | Returned to the previous song.');
+      .setDescription(':rewind: | Returned to the </previous:1190439304183414880> song.');
 
     interaction.reply({ embeds: [previousEmbed] }).then(msg => {
       setTimeout(() => msg.delete(), 5000);

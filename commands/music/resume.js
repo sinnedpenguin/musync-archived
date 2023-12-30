@@ -13,7 +13,7 @@ module.exports = {
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You need to be in a voice channel to resume a paused song!')
+        .setDescription(':x: | You need to be in a voice channel to </resume:1190439304183414884> a paused song!')
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
@@ -50,7 +50,7 @@ module.exports = {
     if (!sameVoiceChannel || voiceChannel.id !== sameVoiceChannel.id) {
       const sameVoiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You must be in the same voice channel to resume a paused song!');
+        .setDescription(':x: | You must be in the same voice channel to </resume:1190439304183414884> a paused song!');
   
       return interaction.reply({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
     }
@@ -59,7 +59,7 @@ module.exports = {
     
     const resumeEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(':arrow_forward: | Resumed the current song!')
+      .setDescription(':arrow_forward: | Resumed the current song! Use </pause:1190439304183414878> to pause.')
       .setTimestamp();
 
     interaction.reply({

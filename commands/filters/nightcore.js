@@ -17,7 +17,7 @@ module.exports = {
 
     await interaction.deferReply();
 
-    if (!hasVoted) {
+    /* if (!hasVoted) {
       logger.error(`"${userId}" has not voted to use "${commandName}".`);
       
       const responseEmbed = new EmbedBuilder()
@@ -32,7 +32,7 @@ module.exports = {
         embeds: [responseEmbed],
       });
       return;
-    };
+    } */
 
     const player = interaction.client.manager.players.get(interaction.guild.id);
 
@@ -60,11 +60,12 @@ module.exports = {
       });
     }
     
+    // eslint-disable-next-line no-undef
     player.toggleNightcore(speed = 1.2999999523162842, pitch = 1.2999999523162842, rate=1);
 
     const filterEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:white_check_mark: | \`Nightcore\` filter is now ${player.filters.karaoke ? '\`enabled\`' : '\`disabled\`'}! Use \`/nowplaying\` to see all enabled filters.`)
+      .setDescription(`:white_check_mark: | \`Nightcore\` filter is now ${player.filters.karaoke ? '`enabled`' : '`disabled`'}! Use </nowplaying:1190439304183414877> to see all enabled filters.`)
       .setTimestamp();
 
     interaction.followUp({

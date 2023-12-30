@@ -16,9 +16,19 @@ module.exports = {
       logger.log(`Posted stats to Top.gg | ${stats.serverCount} servers.`);
     }); */
 
-    client.user.setActivity({
-      type: ActivityType.Playing,
-      name: "music ♩ ♪ ♫"
-    });
+    let activities = [
+      { type: ActivityType.Playing, name: "music ♩ ♪ ♫" },
+      { type: ActivityType.Watching, name: () => `${client.guilds.cache.size} servers.` },
+      { type: ActivityType.Custom, name: () => `Listening with ${client.users.cache.size} users.` },
+    ];
+    let i = 0;
+
+    setInterval(() => {
+      let activity = activities[i++ % activities.length];
+      client.user.setActivity({
+        type: activity.type,
+        name: typeof activity.name === 'function' ? activity.name() : activity.name
+      });
+    }, 60 * 1000); 
 	},
 };

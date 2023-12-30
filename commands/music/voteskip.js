@@ -27,7 +27,7 @@ module.exports = {
 
     const toggleEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:white_check_mark: | Voting system for skipping songs is now ${!voteSkipEnabled ? '\`ON\`' : '\`OFF\`'}.`)
+      .setDescription(`:white_check_mark: | Voting system for skipping songs is now ${!voteSkipEnabled ? '`ON`' : '`OFF`'}.`)
       .setTimestamp();
 
     interaction.reply({ embeds: [toggleEmbed] });

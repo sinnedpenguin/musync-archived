@@ -17,7 +17,7 @@ module.exports = {
 
     await interaction.deferReply();
 
-    if (!hasVoted) {
+    /* if (!hasVoted) {
       logger.error(`"${userId}" has not voted to use "${commandName}".`);
       
       const responseEmbed = new EmbedBuilder()
@@ -32,7 +32,7 @@ module.exports = {
         embeds: [responseEmbed],
       });
       return;
-    };
+    } */
 
     if (!interaction.member.voice.channel) {
       const voiceChannelEmbed = new EmbedBuilder()
@@ -43,18 +43,19 @@ module.exports = {
         embeds: [voiceChannelEmbed],
         ephemeral: true,
       });
-    };
+    }
 
     let player = interaction.client.manager.players.get(interaction.guild.id);
 
     player.set('requester', interaction.user.id);
     player.set('autoplay', !player.get('autoplay'));
+    player.set('playedTracks', []);
 
     logger.info(`User: "${userId}" successfully toggled "${commandName}".`);
 
     const autoPlayEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:white_check_mark: | \`Autoplay\` is now \`${player.get('autoplay') ? 'ON' : 'OFF'}\`! Use \`/nowplaying\` to see the current status.`)
+      .setDescription(`:white_check_mark: | \`Autoplay\` is now \`${player.get('autoplay') ? 'ON' : 'OFF'}\`! Use </nowplaying:1190439304183414877> to see the current status.`)
       .setTimestamp();
 
     return interaction.followUp({

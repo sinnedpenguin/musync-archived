@@ -55,38 +55,42 @@ module.exports = {
     const mode = interaction.options.getString('mode');
 
     switch (mode) {
-      case 'off':
+      case 'off': {
         player.setQueueRepeat(false);
         player.setTrackRepeat(false);
         break;
-
-      case 'song':
+      }
+    
+      case 'song': {
         player.setQueueRepeat(false);
         player.setTrackRepeat(true);
         break;
-
-      case 'queue':
+      }
+    
+      case 'queue': {
         player.setTrackRepeat(false);
         player.setQueueRepeat(true);
         break;
-
-      default:
+      }
+    
+      default: {
         const invalidModeEmbed = new EmbedBuilder()
           .setColor(config.embedColor)
           .setDescription(':x: | Invalid repeat mode.');
-
+    
         return interaction.reply({
           embeds: [invalidModeEmbed],
           ephemeral: true,
         });
+      }
     }
 
     let repeatModeMessage;
 
     if (player.trackRepeat) {
-      repeatModeMessage = `:repeat: | \`Song\` repeat: ${player.trackRepeat ? '\`ON\`' : '\`OFF\`'}. Use \`/nowplaying\` to see the current status.`;
+      repeatModeMessage = `:repeat: | \`Song\` repeat: ${player.trackRepeat ? '`ON`' : '`OFF`'}. Use </nowplaying:1190439304183414877> to see the current status.`;
     } else {
-      repeatModeMessage = `:repeat: | \`Queue\` repeat: ${player.queueRepeat ? '\`ON\`' : '\`OFF\`'}. Use \`/queue\` to see the current status.`;
+      repeatModeMessage = `:repeat: | \`Queue\` repeat: ${player.queueRepeat ? '`ON`' : '`OFF`'}. Use </queue:1190439304183414881> to see the current status.`;
     } 
 
     const repeatModeEmbed = new EmbedBuilder()

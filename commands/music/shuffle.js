@@ -46,7 +46,7 @@ module.exports = {
 
     const shuffleStatusEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(':twisted_rightwards_arrows: | The queue has been shuffled! Use `/queue` to see the current order.')
+      .setDescription(':twisted_rightwards_arrows: | The queue has been shuffled! Use </queue:1190439304183414881> to see the current order.')
       .setTimestamp();
 
     interaction.reply({

@@ -18,7 +18,7 @@ module.exports = {
 
     await interaction.deferReply();
 
-    if (!hasVoted) {
+    /* if (!hasVoted) {
       logger.error(`"${userId}" has not voted to use "${commandName}".`);
       
       const responseEmbed = new EmbedBuilder()
@@ -33,7 +33,7 @@ module.exports = {
         embeds: [responseEmbed],
       });
       return;
-    };
+    } */
 
     const player = interaction.client.manager.players.get(interaction.guild.id);
 
@@ -65,6 +65,7 @@ module.exports = {
 
     if (bassBoost) {
       player.setEQ(
+        // eslint-disable-next-line no-undef
         equalizer = [
           { band: 0, gain: 0.2 },
           { band: 1, gain: 0.15 },
@@ -85,6 +86,7 @@ module.exports = {
       );
     } else {
       player.setEQ(
+        // eslint-disable-next-line no-undef
         equalizer = [
           { band: 0, gain: 0 },
           { band: 1, gain: 0 },
@@ -107,7 +109,7 @@ module.exports = {
     
     const filterEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:white_check_mark: | \`Bass Boost\` filter is now ${bassBoost ? '\`enabled\`' : '\`disabled\`'}! Use \`/nowplaying\` to see all enabled filters.`)
+      .setDescription(`:white_check_mark: | \`Bass Boost\` filter is now ${bassBoost ? '`enabled`' : '`disabled`'}! Use </nowplaying:1190439304183414877> to see all enabled filters.`)
       .setTimestamp();
     
     interaction.followUp({
