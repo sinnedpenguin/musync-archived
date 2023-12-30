@@ -70,6 +70,8 @@ module.exports = {
         .setTimestamp();
       return interaction.reply({
         embeds: [successEmbed],
+      }).then(msg => {
+        setTimeout(() => msg.delete(), 5000);
       });
     } else {
       const invalidTimeEmbed = new EmbedBuilder()

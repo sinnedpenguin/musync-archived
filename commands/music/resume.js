@@ -56,6 +56,14 @@ module.exports = {
     }
 
     player.pause(false);
+
+    const messages = await interaction.channel.messages.fetch({ limit: 3 });
+
+    const pauseMessage = messages.find(message => message.author.bot && message.embeds[0].description === ':pause_button: | Paused the current song! Use </resume:1190439304183414884> to resume.');
+
+    if (pauseMessage) {
+      await pauseMessage.delete();
+    }
     
     const resumeEmbed = new EmbedBuilder()
       .setColor(config.embedColor)

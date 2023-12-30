@@ -60,6 +60,18 @@ client.manager.on("trackStart", async player => {
 
   const channel = client.channels.cache.get(player.textChannel);
 
+  const messages = await channel.messages.fetch({ limit: 3 });
+  const nowPlayingMessage = messages.find(message => 
+    message.author.bot && 
+    message.embeds.length > 0 && 
+    message.embeds[0].title && 
+    message.embeds[0].title === 'Now Playing'
+  );
+
+  if (nowPlayingMessage) {
+    await nowPlayingMessage.delete();
+  }
+
   const repeatMode = player.trackRepeat ? 'ON' : 'OFF';
 
   const bassBoostStatus = filterManager.getBassBoostStatus();
@@ -114,9 +126,7 @@ client.manager.on("trackStart", async player => {
       { name: 'Filter(s)', value: `**\`${filtersField.join('\n') || 'NONE'}\`**`, inline: true },
     );
   
-  setTimeout(() => {
-    channel.send({ embeds: [nowPlayingEmbed] });
-  }, 1000);
+  channel.send({ embeds: [nowPlayingEmbed] });
 });
 
 client.manager.on("queueEnd", async (player, track) => {
