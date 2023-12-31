@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const filterManager = require('../../lib/filterManager');
+const filterManager = require('../../utils/filterManager');
 const formatDuration = require('format-duration');
 const config = require('../../config.json');
 
@@ -57,6 +57,24 @@ module.exports = {
     if (player.filters.vibrato) {
       filtersField.push('Vibrato');
     }
+    
+    const messages = await interaction.channel.messages.fetch({ limit: 3 });
+    const nowPlayingMessage = messages.find(message => 
+      message.author.bot && 
+      message.embeds.length > 0 && 
+      message.embeds[0].title && 
+      message.embeds[0].title === 'Now Playing'
+    );
+  
+    if (nowPlayingMessage) {
+      try {
+        await nowPlayingMessage.delete();
+      } catch (error) {
+        logger.error(`Failed to delete message: ${error}.`);
+      }
+    }
+
+    await interaction.deferReply();
 
     const nowPlayingEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
@@ -74,6 +92,6 @@ module.exports = {
         { name: 'Filter(s)', value: `**\`${filtersField.join('\n') || 'NONE'}\`**`, inline: true },
       );
 
-    interaction.reply({ embeds: [nowPlayingEmbed] });
+    interaction.followUp({ embeds: [nowPlayingEmbed] });
   },
 };

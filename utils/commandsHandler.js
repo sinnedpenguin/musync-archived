@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const client = require('./client');
+const client = require('../lib/client');
 const logger = require('./logger');
 
 const foldersPath = path.join(__dirname, '../commands');

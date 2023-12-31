@@ -35,7 +35,7 @@ module.exports = {
     if (!player || !player.queue.current) {
       const noSongPlayingEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | There is no song currently playing!')
+        .setDescription(':x: | There is no song currently playing! Use </play:1190439304183414879> to play a song!')
 
       return interaction.reply({
         embeds: [noSongPlayingEmbed],
@@ -56,20 +56,28 @@ module.exports = {
 
     player.pause(true);
 
-    const messages = await interaction.channel.messages.fetch({ limit: 3 });
+    const messages = await interaction.channel.messages.fetch({ limit: 10 });
 
-    const resumeMessage = messages.find(message => message.author.bot && message.embeds[0].description === ':arrow_forward: | Resumed the current song! Use </pause:1190439304183414878> to pause.');
+    const resumeMessage = messages.find(message => 
+      message.author.bot && 
+      message.embeds[0].description.startsWith(':arrow_forward: | Resumed the current song!'));
 
     if (resumeMessage) {
-      await resumeMessage.delete();
+      try {
+        await resumeMessage.delete();
+      } catch (error) {
+        logger.error(`Failed to delete message: ${error}.`);
+      }
     }
+
+    await interaction.deferReply();
 
     const pauseEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(':pause_button: | Paused the current song! Use </resume:1190439304183414884> to resume.')
       .setTimestamp();
 
-    interaction.reply({
+    interaction.followUp({
       embeds: [pauseEmbed],
     });
   },

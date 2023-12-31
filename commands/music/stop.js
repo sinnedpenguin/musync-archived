@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const config = require('../../config.json');
-const { getVoteStopEnabled } = require('../../lib/votingManager'); 
+const { getVoteStopEnabled } = require('../../utils/votingManager'); 
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -47,6 +47,21 @@ module.exports = {
 
     if (members.size === 1 || !voteStopEnabled) {
       player.destroy();
+
+      const messages = await interaction.channel.messages.fetch({ limit: 10 });
+
+      const stopMessage = messages.find(message =>
+        message.author.bot && message.embeds && message.embeds.length > 0 &&
+        message.embeds[0].description.startsWith(`:stop_button: | Stopped music playback and left the voice channel.`)
+      );
+  
+      if (stopMessage) {
+        try {
+          await stopMessage.delete();
+        } catch (error) {
+          logger.error(`Failed to delete message: ${error}.`);
+        }
+      }
     
       const stopEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
@@ -113,6 +128,21 @@ module.exports = {
       const thumbsUpCount = votes['👍'] || 0;
       if (thumbsUpCount >= votesRequired) {
         player.destroy();
+
+        const messages = await interaction.channel.messages.fetch({ limit: 10 });
+
+        const stopMessage = messages.find(message =>
+          message.author.bot && message.embeds && message.embeds.length > 0 &&
+          message.embeds[0].description === `:stop_button: | Stopped music playback and left the voice channel.\n\n</votestop:1190439304405733393>: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`
+        );
+    
+        if (stopMessage) {
+          try {
+            await stopMessage.delete();
+          } catch (error) {
+            logger.error(`Failed to delete message: ${error}.`);
+          }
+        }
     
         const stopEmbed = new EmbedBuilder()
           .setColor(config.embedColor)

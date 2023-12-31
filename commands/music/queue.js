@@ -13,7 +13,7 @@ module.exports = {
       .setDescription('Page number of the queue. Leave blank for page 1.')
       .setMinValue(1)),
 
-  execute(interaction) {
+  async execute(interaction) {
     let player = interaction.client.manager.players.get(interaction.guild.id);
 
     if (!player || !player.queue || !player.queue.current) {
@@ -25,6 +25,18 @@ module.exports = {
         embeds: [noSongsEmbed],
         ephemeral: true,
       });
+    }
+
+    const messages = await interaction.channel.messages.fetch({ limit: 10 });
+    const queueMessage = messages.find(message => 
+      message.author.bot && 
+      message.embeds.length > 0 && 
+      message.embeds[0].title && 
+      message.embeds[0].title.startsWith('Queue')
+    );
+  
+    if (queueMessage) {
+      await queueMessage.delete();
     }
 
     const totalPages = Math.max(1, Math.ceil(player.queue.length / pageSize));
@@ -42,13 +54,14 @@ module.exports = {
 
     const nowPlaying = player.queue.current;
 
+    await interaction.deferReply();
+
     const queueEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setTitle(`Queue (${player.queue.length + 1})`)
       .addFields(
         { name: 'Now Playing', value: nowPlaying ? `${nowPlaying.title} - **\`${formatDuration(nowPlaying.duration)}\`** - <@${nowPlaying.requester}>` : 'None' }
       );
-
 
     const totalDuration = player.queue.reduce((acc, track) => acc + track.duration, 0) + (nowPlaying ? nowPlaying.duration : 0);
     const formattedTotalDuration = formatDuration(totalDuration);
@@ -64,6 +77,6 @@ module.exports = {
 
     queueEmbed.setFooter({ text: `Page ${page} of ${totalPages}` });
 
-    interaction.reply({ embeds: [queueEmbed] });
+    interaction.followUp({ embeds: [queueEmbed] });
   }
 };

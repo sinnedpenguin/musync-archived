@@ -1,47 +1,28 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const checkTopGGVote = require('../../lib/topgg');
+const { checkTopGGVoteAndRespond  } = require('../../utils/topgg');
 const config = require('../../config.json');
-const logger = require('../../lib/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('filter-soft')
     .setDescription('Toggle Soft filter.'),
   async execute(interaction) {
-    const userId = interaction.user.id;
     const member = interaction.member;
     const voiceChannel = member.voice.channel;
     const commandName = interaction.commandName;
 
-    const hasVoted = await checkTopGGVote(userId);
-
-    await interaction.deferReply();
-
-    /* if (!hasVoted) {
-      logger.error(`"${userId}" has not voted to use "${commandName}".`);
-      
-      const responseEmbed = new EmbedBuilder()
-        .setColor(config.embedColor)
-        .setDescription(`:unlock: | Unlock the \`${commandName}\` feature by casting your vote on \`Top.gg\`! Your vote unlocks access for \`12 hours\`!`)
-        .addFields({
-          name: 'Why Vote?',
-          value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`autoplay\`, \`filters\`, \`lyrics\`, \`volume\`, and more—coming soon!\n\n✨ [Vote now!](${config.vote})`,
-        });
-      
-      await interaction.followUp({
-        embeds: [responseEmbed],
-      });
+    if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
       return;
-    } */
+    }
 
     const player = interaction.client.manager.players.get(interaction.guild.id);
 
     if (!player || !player.queue.current) {
       const noSongPlayingEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | There is no song currently playing!')
+        .setDescription(':x: | There is no song currently playing! Use </play:1190439304183414879> to play a song!')
 
-      return interaction.followUp({
+      return interaction.reply({
         embeds: [noSongPlayingEmbed],
         ephemeral: true,
       });
@@ -60,8 +41,23 @@ module.exports = {
       });
     }
 
+    const messages = await interaction.channel.messages.fetch({ limit: 10 });
+
+    const filterMessage = messages.find(message => 
+      message.author.bot && 
+      message.embeds.length > 0 && 
+      message.embeds[0].description && 
+      message.embeds[0].description.includes('filter')
+    );
+
+    if (filterMessage) {
+      await filterMessage.delete();
+    }
+
     // eslint-disable-next-line no-undef
     player.toggleLowPass(smoothing = 20);
+
+    await interaction.deferReply();
 
     const filterEmbed = new EmbedBuilder()
       .setColor(config.embedColor)

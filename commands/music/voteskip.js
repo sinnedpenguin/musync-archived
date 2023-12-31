@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const config = require('../../config.json');
-const { getVoteSkipEnabled, setVoteSkipEnabled } = require('../../lib/votingManager');
+const { getVoteSkipEnabled, setVoteSkipEnabled } = require('../../utils/votingManager');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -25,11 +25,13 @@ module.exports = {
 
     setVoteSkipEnabled(!voteSkipEnabled);
 
+    await interaction.deferReply();
+
     const toggleEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(`:white_check_mark: | Voting system for skipping songs is now ${!voteSkipEnabled ? '`ON`' : '`OFF`'}.`)
       .setTimestamp();
 
-    interaction.reply({ embeds: [toggleEmbed] });
+    interaction.followUp({ embeds: [toggleEmbed] });
   },
 };

@@ -20,7 +20,6 @@
     "erela.js-deezer": "^1.0.7",
     "erela.js-filters": "^1.2.7",
     "format-duration": "^3.0.2",
-    "magmastream": "^2.2.4",
     "pino": "^8.17.1",
     "pino-pretty": "^10.3.0",
     "rlyrics": "^2.0.1",

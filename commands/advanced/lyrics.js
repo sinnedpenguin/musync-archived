@@ -1,9 +1,9 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { Rlyrics } = require("rlyrics");
 const rlyrics = new Rlyrics();
-const checkTopGGVote = require('../../lib/topgg');
+const { checkTopGGVoteAndRespond  } = require('../../utils/topgg');
 const config = require('../../config.json');
-const logger = require('../../lib/logger');
+const logger = require('../../utils/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -21,26 +21,11 @@ module.exports = {
 
     logger.info(`"${userId}" executed "${commandName}".`);
 
-    const hasVoted = await checkTopGGVote(userId);
-
-    await interaction.deferReply();
-
-    /* if (!hasVoted) {
-      logger.error(`"${userId}" has not voted to use "${commandName}".`);
-      
-      const responseEmbed = new EmbedBuilder()
-        .setColor(config.embedColor)
-        .setDescription(`:unlock: | Unlock the \`${commandName}\` feature by casting your vote on \`Top.gg\`! Your vote unlocks access for \`12 hours\`!`)
-        .addFields({
-          name: 'Why Vote?',
-          value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`autoplay\`, \`filters\`, \`lyrics\`, \`volume\`, and more—coming soon!\n\n✨ [Vote now!](${config.vote})`,
-        });
-      
-      await interaction.followUp({
-        embeds: [responseEmbed],
-      });
+    /* if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
       return;
     } */
+
+    await interaction.deferReply();
 
     try {
       const encodedQuery = encodeURIComponent(query);
@@ -51,7 +36,7 @@ module.exports = {
         const bestResult = searchResults[0];
         const detailedResult = await rlyrics.find(bestResult.url);
     
-        const lyricsContent = detailedResult.lyrics || ':x: | Lyrics not available.';
+        const lyricsContent = detailedResult.lyrics || ':x: | Lyrics not available. Please try again: </lyrics:1190439303931772979>.';
     
         const chunks = lyricsContent.match(/[\s\S]{1,2000}/g) || [];
     
@@ -71,7 +56,7 @@ module.exports = {
       } else {
         const notFoundEmbed = new EmbedBuilder()
           .setColor(config.embedColor)
-          .setDescription(`:x: | No results found for \`${query}\`.`)
+          .setDescription(`:x: | No results found for \`${query}\`. Please try again: </lyrics:1190439303931772979>.`)
           .setTimestamp();
     
         await interaction.followUp({ 
@@ -85,7 +70,7 @@ module.exports = {
       if (error.message.includes('Invalid query')) {
         const invalidQueryEmbed = new EmbedBuilder()
           .setColor(config.embedColor)
-          .setDescription(':x: | Invalid query. Please provide a valid query.')
+          .setDescription(':x: | Invalid query. Please provide a valid query. Try again: </lyrics:1190439303931772979>.')
           .setTimestamp();
     
         await interaction.followUp({ 
@@ -95,7 +80,7 @@ module.exports = {
       } else {
         const errorEmbed = new EmbedBuilder()
           .setColor(config.embedColor)
-          .setDescription(':x: | An error occurred while fetching lyrics. Please try again.')
+          .setDescription(':x: | An error occurred while fetching lyrics. Please try again: </lyrics:1190439303931772979>.')
           .setTimestamp();
     
         await interaction.followUp({ 

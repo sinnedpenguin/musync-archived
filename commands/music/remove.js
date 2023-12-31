@@ -11,7 +11,7 @@ module.exports = {
       .setRequired(true)
       .setMinValue(1)),
 
-  execute(interaction) {
+  async execute(interaction) {
     const member = interaction.member;
     const voiceChannel = member.voice.channel;
     const songNumber = interaction.options.getInteger('number');
@@ -57,11 +57,13 @@ module.exports = {
     const removedSong = player.queue[songNumber - 1];
     player.queue.remove(songNumber - 1);
 
+    await interaction.deferReply();
+
     const removeEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(`:wastebasket: | Removed ${songNumber}. [${removedSong.title}](${removedSong.uri}). Use </queue:1190439304183414881> to see the current order.`)
       .setTimestamp();
 
-    interaction.reply({ embeds: [removeEmbed] });
+    interaction.followUp({ embeds: [removeEmbed] });
   },
 };

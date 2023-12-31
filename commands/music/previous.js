@@ -6,7 +6,7 @@ module.exports = {
     .setName('previous')
     .setDescription('Return to the previous song in the queue.'),
 
-  execute(interaction) {
+  async execute(interaction) {
     const member = interaction.member;
     const voiceChannel = member.voice.channel;
 
@@ -54,11 +54,13 @@ module.exports = {
 
     player.stop();
 
+    await interaction.deferReply();
+
     const previousEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(':rewind: | Returned to the </previous:1190439304183414880> song.');
 
-    interaction.reply({ embeds: [previousEmbed] }).then(msg => {
+    interaction.followUp({ embeds: [previousEmbed] }).then(msg => {
       setTimeout(() => msg.delete(), 5000);
     });
   },

@@ -62,13 +62,15 @@ module.exports = {
 
     const durationInSeconds = Math.floor(player.queue.current.duration / 1000);
 
+    await interaction.deferReply();
+
     if (timeInSeconds <= durationInSeconds) {
       player.seek(timeInSeconds * 1000); 
       const successEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
         .setDescription(`⏩ | Seeked to \`${formatDuration(timeInSeconds * 1000)}\`.`)
         .setTimestamp();
-      return interaction.reply({
+      return interaction.followUp({
         embeds: [successEmbed],
       }).then(msg => {
         setTimeout(() => msg.delete(), 5000);
@@ -77,7 +79,7 @@ module.exports = {
       const invalidTimeEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
         .setDescription(':x: | Invalid time format or time exceeds the duration. Please try again: </seek:1190439304405733386>.');
-      return interaction.reply({
+      return interaction.followUp({
         embeds: [invalidTimeEmbed],
         ephemeral: true,
       });

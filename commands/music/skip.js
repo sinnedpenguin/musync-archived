@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const config = require('../../config.json');
-const { getVoteSkipEnabled } = require('../../lib/votingManager');
+const { getVoteSkipEnabled } = require('../../utils/votingManager');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -15,7 +15,7 @@ module.exports = {
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:x: | You need to be in a voice channel to </skip:1190439304405733388> the song!\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        .setDescription(`:x: | You need to be in a voice channel to </skip:1190439304405733388> a song!\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
@@ -28,7 +28,7 @@ module.exports = {
     if (!sameVoiceChannel || voiceChannel.id !== sameVoiceChannel.id) {
       const sameVoiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:x: | You must be in the same voice channel to </skip:1190439304405733388> the song!\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        .setDescription(`:x: | You must be in the same voice channel to </skip:1190439304405733388> a song!\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
   
       return interaction.reply({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
     }

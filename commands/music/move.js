@@ -16,7 +16,7 @@ module.exports = {
       .setRequired(true)
       .setMinValue(1)),
 
-  execute(interaction) {
+  async execute(interaction) {
     const member = interaction.member;
     const voiceChannel = member.voice.channel;
     const currentPosition = interaction.options.getInteger('current');
@@ -66,11 +66,13 @@ module.exports = {
     const movedSong = player.queue.splice(fromIndex, 1)[0];
     player.queue.splice(toIndex, 0, movedSong);
 
+    await interaction.deferReply();
+
     const moveEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(`:arrow_double_up: | Moved [${movedSong.title}](${movedSong.uri}) from position ${currentPosition} to ${newPosition}. Use </queue:1190439304183414881> to see the current order.`)
       .setTimestamp();
 
-    interaction.reply({ embeds: [moveEmbed] });
+    interaction.followUp({ embeds: [moveEmbed] });
   },
 };

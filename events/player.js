@@ -1,10 +1,10 @@
 const { EmbedBuilder } = require('discord.js');
 const client = require('../lib/client');
 const formatDuration = require('format-duration');
-const filterManager = require('../lib/filterManager');
-const checkTopGGVote = require('../lib/topgg');
+const filterManager = require('../utils/filterManager');
+const { checkTopGGVote } = require('../utils/topgg');
 const config = require('../config.json');
-const logger = require('../lib/logger');
+const logger = require('../utils/logger');
 
 client.manager.on("nodeConnect", node => {
   logger.info(`Node "${node.options.identifier}" connected.`);
@@ -60,7 +60,7 @@ client.manager.on("trackStart", async player => {
 
   const channel = client.channels.cache.get(player.textChannel);
 
-  const messages = await channel.messages.fetch({ limit: 3 });
+  const messages = await channel.messages.fetch({ limit: 10 });
   const nowPlayingMessage = messages.find(message => 
     message.author.bot && 
     message.embeds.length > 0 && 
@@ -69,7 +69,11 @@ client.manager.on("trackStart", async player => {
   );
 
   if (nowPlayingMessage) {
-    await nowPlayingMessage.delete();
+    try {
+      await nowPlayingMessage.delete();
+    } catch (error) {
+      logger.error(`Failed to delete message: ${error}`);
+    }
   }
 
   const repeatMode = player.trackRepeat ? 'ON' : 'OFF';
@@ -130,6 +134,38 @@ client.manager.on("trackStart", async player => {
 });
 
 client.manager.on("queueEnd", async (player, track) => {
+  const channel = client.channels.cache.get(player.textChannel);
+
+  const messages = await channel.messages.fetch({ limit: 10 });
+
+  const nowPlayingMessage = messages.find(message => 
+    message.author.bot && 
+    message.embeds.length > 0 && 
+    message.embeds[0].title && 
+    message.embeds[0].title === 'Now Playing'
+  );
+
+  if (nowPlayingMessage) {
+    await nowPlayingMessage.delete();
+  }
+
+  const lastMessages = await channel.messages.fetch({ limit: 10 });
+
+  lastMessages.each(async (message) => {
+    if (message.author.bot && 
+        message.id !== nowPlayingMessage.id && 
+        !(message.embeds.length > 0 && 
+          message.embeds[0].description && 
+          (message.embeds[0].description.startsWith(':stop_button: | Stopped music playback and left the voice channel.') || 
+           message.embeds[0].description.includes('Queue concluded')))) {
+      try {
+        await message.delete();
+      } catch (error) {
+        logger.error(`Failed to delete message: ${error}`);
+      }
+    }
+  });
+2
   const autoplayEnabled = player.get("autoplay");
 
   if (autoplayEnabled) {

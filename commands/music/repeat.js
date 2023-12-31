@@ -14,7 +14,7 @@ module.exports = {
           { name: 'queue', value: 'queue' },
           { name: 'off', value: 'off' },
         )),
-  execute(interaction) {
+  async execute(interaction) {
     const member = interaction.member;
     const voiceChannel = member.voice.channel;
 
@@ -85,20 +85,38 @@ module.exports = {
       }
     }
 
-    let repeatModeMessage;
+    const messages = await interaction.channel.messages.fetch({ limit: 10 });
 
+    const oldRepeatModeMessage = messages.find(message =>
+      message.author.bot && message.embeds && message.embeds.length > 0 &&
+      (message.embeds[0].description.startsWith(':repeat: | `Song` repeat') ||
+       message.embeds[0].description.startsWith(':repeat: | `Queue` repeat'))
+    );
+    
+    if (oldRepeatModeMessage) {
+      try {
+        await oldRepeatModeMessage.delete();
+      } catch (error) {
+        logger.error(`Failed to delete message: ${error}.`);
+      }
+    }
+    
+    let newRepeatModeMessage;
+    
     if (player.trackRepeat) {
-      repeatModeMessage = `:repeat: | \`Song\` repeat: ${player.trackRepeat ? '`ON`' : '`OFF`'}. Use </nowplaying:1190439304183414877> to see the current status.`;
+      newRepeatModeMessage = `:repeat: | \`Song\` repeat: ${player.trackRepeat ? '`ON`' : '`OFF`'}. Use </nowplaying:1190439304183414877> to see the current status.`;
     } else {
-      repeatModeMessage = `:repeat: | \`Queue\` repeat: ${player.queueRepeat ? '`ON`' : '`OFF`'}. Use </queue:1190439304183414881> to see the current status.`;
+      newRepeatModeMessage = `:repeat: | \`Queue\` repeat: ${player.queueRepeat ? '`ON`' : '`OFF`'}. Use </queue:1190439304183414881> to see the current status.`;
     } 
 
+    await interaction.deferReply();
+    
     const repeatModeEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`${repeatModeMessage}`)
+      .setDescription(`${newRepeatModeMessage}`)
       .setTimestamp();
-
-    interaction.reply({
+    
+    interaction.followUp({
       embeds: [repeatModeEmbed],
     });
   },

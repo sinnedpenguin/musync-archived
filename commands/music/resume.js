@@ -57,20 +57,28 @@ module.exports = {
 
     player.pause(false);
 
-    const messages = await interaction.channel.messages.fetch({ limit: 3 });
+    const messages = await interaction.channel.messages.fetch({ limit: 10 });
 
-    const pauseMessage = messages.find(message => message.author.bot && message.embeds[0].description === ':pause_button: | Paused the current song! Use </resume:1190439304183414884> to resume.');
+    const pauseMessage = messages.find(message => 
+      message.author.bot && 
+      message.embeds[0].description.startsWith(':pause_button: | Paused the current song!'))
 
     if (pauseMessage) {
-      await pauseMessage.delete();
+      try {
+        await pauseMessage.delete();
+      } catch (error) {
+        logger.error(`Failed to delete message: ${error}.`);
+      }
     }
+
+    await interaction.deferReply();
     
     const resumeEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(':arrow_forward: | Resumed the current song! Use </pause:1190439304183414878> to pause.')
       .setTimestamp();
 
-    interaction.reply({
+    interaction.followUp({
       embeds: [resumeEmbed],
     });
   },

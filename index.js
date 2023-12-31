@@ -1,6 +1,6 @@
 require('dotenv').config();
-require('./lib/eventsHandler');
-require('./lib/commandsHandler');
+require('./utils/eventsHandler');
+require('./utils/commandsHandler');
 require('./deployCommands')
 const client = require('./lib/client');
 

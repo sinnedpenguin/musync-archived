@@ -1,37 +1,18 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const filterManager = require('../../lib/filterManager');
-const checkTopGGVote = require('../../lib/topgg');
+const filterManager = require('../../utils/filterManager');
+const { checkTopGGVoteAndRespond  } = require('../../utils/topgg');
 const config = require('../../config.json');
-const logger = require('../../lib/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('filter-bassboost')
     .setDescription('Toggle Bass Boost filter.'),
   async execute(interaction) {
-    const userId = interaction.user.id;
     const member = interaction.member;
     const voiceChannel = member.voice.channel;
     const commandName = interaction.commandName;
-
-    const hasVoted = await checkTopGGVote(userId);
-
-    await interaction.deferReply();
-
-    /* if (!hasVoted) {
-      logger.error(`"${userId}" has not voted to use "${commandName}".`);
-      
-      const responseEmbed = new EmbedBuilder()
-        .setColor(config.embedColor)
-        .setDescription(`:unlock: | Unlock the \`${commandName}\` feature by casting your vote on \`Top.gg\`! Your vote unlocks access for \`12 hours\`!`)
-        .addFields({
-          name: 'Why Vote?',
-          value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`autoplay\`, \`filters\`, \`lyrics\`, \`volume\`, and more—coming soon!\n\n✨ [Vote now!](${config.vote})`,
-        });
-      
-      await interaction.followUp({
-        embeds: [responseEmbed],
-      });
+    
+    /* if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
       return;
     } */
 
@@ -40,9 +21,9 @@ module.exports = {
     if (!player || !player.queue.current) {
       const noSongPlayingEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | There is no song currently playing!')
+        .setDescription(':x: | There is no song currently playing! Use </play:1190439304183414879> to play a song!')
 
-      return interaction.followUp({
+      return interaction.reply({
         embeds: [noSongPlayingEmbed],
         ephemeral: true,
       });
@@ -55,10 +36,23 @@ module.exports = {
         .setColor(config.embedColor)
         .setDescription(`:x: | You must be in the same voice channel to toggle \`${commandName}\`!`);
 
-      return interaction.followUp({ 
+      return interaction.reply({ 
         embeds: [sameVoiceChannelEmbed], 
         ephemeral: true 
       });
+    }
+
+    const messages = await interaction.channel.messages.fetch({ limit: 10 });
+
+    const filterMessage = messages.find(message => 
+      message.author.bot && 
+      message.embeds.length > 0 && 
+      message.embeds[0].description && 
+      message.embeds[0].description.includes('filter')
+    );
+
+    if (filterMessage) {
+      await filterMessage.delete();
     }
 
     let bassBoost = filterManager.toggleBassBoost();
@@ -106,6 +100,8 @@ module.exports = {
         ]
       );
     }
+
+    await interaction.deferReply();
     
     const filterEmbed = new EmbedBuilder()
       .setColor(config.embedColor)

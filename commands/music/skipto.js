@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const config = require('../../config.json');
-const { getVoteSkipEnabled } = require('../../lib/votingManager');
+const { getVoteSkipEnabled } = require('../../utils/votingManager');
 
 module.exports = {
   data: new SlashCommandBuilder()

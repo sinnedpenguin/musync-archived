@@ -12,7 +12,7 @@ module.exports = {
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You need to be in a voice channel to use this command!')
+        .setDescription(':x: | You need to be in a voice channel to use this command! Please try again: </join:1190439304405733395>.')
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
@@ -25,7 +25,7 @@ module.exports = {
     if (sameVoiceChannel && voiceChannel.id === sameVoiceChannel.id) {
       const alreadyInChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | Already in the voice channel!')
+        .setDescription(':x: | Already in the voice channel! Do you mean </leave:1190439304607055942>?')
   
       return interaction.reply({ embeds: [alreadyInChannelEmbed], ephemeral: true });
     }
@@ -56,14 +56,21 @@ module.exports = {
       await player.connect();
     } catch (error) {
       console.error(error);
-      return interaction.reply('Error joining to the voice channel.');
+      const joinErrorEmbed = new EmbedBuilder()
+        .setColor(config.embedColor)
+        .setDescription(`:x: | Error joining to the voice channel. Please try again: </join:1190439304405733395>.`)
+        .setTimestamp();
+
+      interaction.reply({ embeds: [joinErrorEmbed] });
     }
+
+    await interaction.deferReply();
 
     const joinEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(`:white_check_mark: | Joined the voice channel: \`${voiceChannel.name}\`!`)
       .setTimestamp();
 
-    interaction.reply({ embeds: [joinEmbed] });
+    interaction.followUp({ embeds: [joinEmbed] });
   },
 };

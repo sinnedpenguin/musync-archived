@@ -1,7 +1,7 @@
 const { Events, ActivityType } = require('discord.js');
 const client = require('../lib/client');
 const { AutoPoster } = require('topgg-autoposter');
-const logger = require('../lib/logger');
+const logger = require('../utils/logger');
 
 module.exports = {
 	name: Events.ClientReady,

@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const checkTopGGVote = require('../../lib/topgg');
+const { checkTopGGVoteAndRespond  } = require('../../utils/topgg');
 const config = require('../../config.json');
-const logger = require('../../lib/logger');
+const logger = require('../../utils/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -23,33 +23,16 @@ module.exports = {
 
     logger.info(`"${userId}" executed "${commandName}".`);
 
-    const hasVoted = await checkTopGGVote(userId);
-
-    await interaction.deferReply();
-
-    /* if (!hasVoted) {
-      logger.error(`"${userId}" has not voted to use "${commandName}".`);
-      
-      const responseEmbed = new EmbedBuilder()
-        .setColor(config.embedColor)
-        .setDescription(`:unlock: | Unlock the \`${commandName}\` feature by casting your vote on \`Top.gg\`! Your vote unlocks access for \`12 hours\`!`)
-        .addFields({
-          name: 'Why Vote?',
-          value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`autoplay\`, \`filters\`, \`lyrics\`, \`volume\`, and more—coming soon!\n\n✨ [Vote now!](${config.vote})`,
-        });
-      
-      await interaction.followUp({
-        embeds: [responseEmbed],
-      });
+    if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
       return;
-    } */
+    }
 
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
         .setDescription(':x: | You need to be in a voice channel to adjust the volume of music playback!')
 
-      return interaction.followUp({
+      return interaction.reply({
         embeds: [voiceChannelEmbed],
         ephemeral: true,
       });
@@ -72,10 +55,12 @@ module.exports = {
         .setColor(config.embedColor)
         .setDescription(':x: | No songs are currently playing!');
 
-      return interaction.followUp({ embeds: [noSongsEmbed], ephemeral: true });
+      return interaction.reply({ embeds: [noSongsEmbed], ephemeral: true });
     }
 
     player.setVolume(volumeLevel);
+
+    await interaction.deferReply();
     
     const volumeEmbed = new EmbedBuilder()
       .setColor(config.embedColor)

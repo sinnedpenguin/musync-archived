@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const config = require('../../config.json');
-const { getVoteStopEnabled, setVoteStopEnabled } = require('../../lib/votingManager');
+const { getVoteStopEnabled, setVoteStopEnabled } = require('../../utils/votingManager');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -25,11 +25,13 @@ module.exports = {
 
     setVoteStopEnabled(!voteStopEnabled);
 
+    await interaction.deferReply();
+
     const toggleEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(`:white_check_mark: | Voting system for stopping music playback is now ${!voteStopEnabled ? '`ON`' : '`OFF`'}.`)
       .setTimestamp();
 
-    interaction.reply({ embeds: [toggleEmbed] });
+    interaction.followUp({ embeds: [toggleEmbed] });
   },
 };

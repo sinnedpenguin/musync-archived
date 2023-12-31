@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const checkTopGGVote = require('../../lib/topgg')
+const { checkTopGGVote } = require('../../utils/topgg')
 const config = require('../../config.json');
-const logger = require('../../lib/logger');
+const logger = require('../../utils/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -19,14 +19,12 @@ module.exports = {
 
     logger.info(`"${userId}" executed "${commandName}" with query: "${query}".`);
 
-    await interaction.deferReply();
-
     if (!interaction.member.voice.channel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You need to be in a voice channel to </play:1190439304183414879> a song!');
+        .setDescription(':x: | You need to be in a voice channel to play a song! Please try again: </play:1190439304183414879>.');
 
-      return interaction.followUp({
+      return interaction.reply({
         embeds: [voiceChannelEmbed],
         ephemeral: true,
       });
@@ -70,13 +68,15 @@ module.exports = {
         .setColor(config.embedColor)
         .setDescription(':x: | No results found for the given query.');
 
-      return interaction.followUp({
+      return interaction.reply({
         embeds: [notFoundEmbed],
         ephemeral: true,
       });
     }
 
     results.tracks.forEach((track) => (track.requester = interaction.user.id));
+
+    await interaction.deferReply();
 
     if (results.playlist || results.loadType === 'PLAYLIST') {
       player.queue.add(results.tracks);
