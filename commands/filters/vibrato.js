@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { checkTopGGVoteAndRespond  } = require('../../utils/topgg');
 const config = require('../../config.json');
+const logger = require('../../utils/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -51,7 +52,11 @@ module.exports = {
     );
 
     if (filterMessage) {
-      await filterMessage.delete();
+      try {
+        await filterMessage.delete();
+      } catch (error) {
+        logger.error(`Failed to delete message: ${error}.`);
+      }
     }
 
     // eslint-disable-next-line no-undef
