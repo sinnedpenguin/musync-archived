@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const config = require('../../config.json');
 const { getVoteStopEnabled } = require('../../utils/votingManager'); 
+const config = require('../../config.json');
+const logger = require('../../utils/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -48,7 +49,7 @@ module.exports = {
     if (members.size === 1 || !voteStopEnabled) {
       player.destroy();
 
-      const messages = await interaction.channel.messages.fetch({ limit: 10 });
+      const messages = await interaction.channel.messages.fetch({ limit: 3 });
 
       const stopMessage = messages.find(message =>
         message.author.bot && message.embeds && message.embeds.length > 0 &&
@@ -129,7 +130,7 @@ module.exports = {
       if (thumbsUpCount >= votesRequired) {
         player.destroy();
 
-        const messages = await interaction.channel.messages.fetch({ limit: 10 });
+        const messages = await interaction.channel.messages.fetch({ limit: 3 });
 
         const stopMessage = messages.find(message =>
           message.author.bot && message.embeds && message.embeds.length > 0 &&

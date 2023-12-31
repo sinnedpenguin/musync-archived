@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const config = require('../../config.json');
+const logger = require('../../utils/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -85,7 +86,7 @@ module.exports = {
       }
     }
 
-    const messages = await interaction.channel.messages.fetch({ limit: 10 });
+    const messages = await interaction.channel.messages.fetch({ limit: 3 });
 
     const oldRepeatModeMessage = messages.find(message =>
       message.author.bot && message.embeds && message.embeds.length > 0 &&

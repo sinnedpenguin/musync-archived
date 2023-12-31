@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const config = require('../../config.json');
+const logger = require('../../utils/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -65,6 +66,21 @@ module.exports = {
 
     const movedSong = player.queue.splice(fromIndex, 1)[0];
     player.queue.splice(toIndex, 0, movedSong);
+
+    const messages = await interaction.channel.messages.fetch({ limit: 3 });
+
+    const moveMessage = messages.find(message =>
+      message.author.bot && message.embeds && message.embeds.length > 0 &&
+      message.embeds[0].description.startsWith(`:arrow_double_up: | Moved`)
+    );
+
+    if (moveMessage) {
+      try {
+        await moveMessage.delete();
+      } catch (error) {
+        logger.error(`Failed to delete message: ${error}.`);
+      }
+    }
 
     await interaction.deferReply();
 

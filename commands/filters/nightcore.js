@@ -41,7 +41,7 @@ module.exports = {
       });
     }
     
-    const messages = await interaction.channel.messages.fetch({ limit: 10 });
+    const messages = await interaction.channel.messages.fetch({ limit: 3 });
 
     const filterMessage = messages.find(message => 
       message.author.bot && 

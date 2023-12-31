@@ -1,8 +1,9 @@
 const { EmbedBuilder } = require('discord.js');
-const client = require('../lib/client');
+const client = require('../client');
 const formatDuration = require('format-duration');
 const filterManager = require('../utils/filterManager');
 const { checkTopGGVote } = require('../utils/topgg');
+const autoPlay = require('../utils/autoPlayer');
 const config = require('../config.json');
 const logger = require('../utils/logger');
 
@@ -60,7 +61,7 @@ client.manager.on("trackStart", async player => {
 
   const channel = client.channels.cache.get(player.textChannel);
 
-  const messages = await channel.messages.fetch({ limit: 10 });
+  const messages = await channel.messages.fetch({ limit: 3 });
   const nowPlayingMessage = messages.find(message => 
     message.author.bot && 
     message.embeds.length > 0 && 
@@ -136,7 +137,7 @@ client.manager.on("trackStart", async player => {
 client.manager.on("queueEnd", async (player, track) => {
   const channel = client.channels.cache.get(player.textChannel);
 
-  const messages = await channel.messages.fetch({ limit: 10 });
+  const messages = await channel.messages.fetch({ limit: 3 });
 
   const nowPlayingMessage = messages.find(message => 
     message.author.bot && 
@@ -146,26 +147,13 @@ client.manager.on("queueEnd", async (player, track) => {
   );
 
   if (nowPlayingMessage) {
+    try {
     await nowPlayingMessage.delete();
+    } catch (error) {
+      logger.error(`Failed to delete message: ${error}`);
+    }
   }
 
-  const lastMessages = await channel.messages.fetch({ limit: 10 });
-
-  lastMessages.each(async (message) => {
-    if (message.author.bot && 
-        message.id !== nowPlayingMessage.id && 
-        !(message.embeds.length > 0 && 
-          message.embeds[0].description && 
-          (message.embeds[0].description.startsWith(':stop_button: | Stopped music playback and left the voice channel.') || 
-           message.embeds[0].description.includes('Queue concluded')))) {
-      try {
-        await message.delete();
-      } catch (error) {
-        logger.error(`Failed to delete message: ${error}`);
-      }
-    }
-  });
-2
   const autoplayEnabled = player.get("autoplay");
 
   if (autoplayEnabled) {
@@ -188,63 +176,8 @@ client.manager.on("queueEnd", async (player, track) => {
       });
       return;
     }; */
-
-    const playedTracks = player.get("playedTracks");
-    playedTracks.push(track.identifier);
-
-    if (track.sourceName === "spotify") {
-      const currentTrackTitle = track.title;
-      const currentTrackAuthor = track.author;
-      const currentTrackResult = await player.search(`${currentTrackTitle} - ${currentTrackAuthor}`);
     
-      if (currentTrackResult.exception) {
-        logger.error(`Error searching for the current track: ${currentTrackResult.exception.message}`);
-        return;
-      }
-    
-      if (currentTrackResult.tracks.length === 0) {
-        logger.warn("No matching track found.");
-        return;
-      }
-    
-      const identifier = currentTrackResult.tracks[0].identifier;
-    
-      const search = `https://www.youtube.com/watch?v=${identifier}&list=RD${identifier}`;
-      const result = await player.search(search, requester);
-    
-      if (result.exception) {
-        logger.error(`Error searching for the next track in the playlist: ${result.exception.message}`);
-        return;
-      }
-    
-      const nextTrack = result.tracks.slice(1).find((t) => !playedTracks.includes(t.identifier));
-    
-      if (nextTrack) {
-        playedTracks.push(nextTrack.identifier);
-        player.queue.add(nextTrack);
-        player.play();
-      } else {
-        logger.warn("No next track available.");
-      }
-    } else {
-      const search = `https://www.youtube.com/watch?v=${track.identifier}&list=RD${track.identifier}`;
-      const result = await player.search(search, requester);
-  
-      if (result.exception) {
-        logger.error(`Error searching for the next track: ${result.exception.message}`);
-        return;
-      }
-  
-      const nextTrack = result.tracks.find((t) => !playedTracks.includes(t.identifier));
-  
-      if (nextTrack) {
-        player.queue.add(nextTrack);
-        player.play();
-        playedTracks.push(nextTrack.identifier);
-      } else {
-        logger.warn("No next track available.");
-      }
-    }
+    await autoPlay(player, track);
   } else {
     if (player && player.state === "CONNECTED") {
       if (player.disconnectTimeout) {

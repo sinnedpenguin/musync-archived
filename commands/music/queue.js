@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const formatDuration = require('format-duration');
 const config = require('../../config.json');
+const logger = require('../../utils/logger');
 
 const pageSize = 14;
 
@@ -27,7 +28,7 @@ module.exports = {
       });
     }
 
-    const messages = await interaction.channel.messages.fetch({ limit: 10 });
+    const messages = await interaction.channel.messages.fetch({ limit: 3 });
     const queueMessage = messages.find(message => 
       message.author.bot && 
       message.embeds.length > 0 && 
@@ -36,7 +37,11 @@ module.exports = {
     );
   
     if (queueMessage) {
-      await queueMessage.delete();
+      try {
+        await queueMessage.delete();
+      } catch (error) {
+        logger.error(`Failed to delete message: ${error}.`);
+      }
     }
 
     const totalPages = Math.max(1, Math.ceil(player.queue.length / pageSize));

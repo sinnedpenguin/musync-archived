@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const config = require('../../config.json');
+const logger = require('../../utils/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -56,6 +57,21 @@ module.exports = {
 
     const removedSong = player.queue[songNumber - 1];
     player.queue.remove(songNumber - 1);
+
+    const messages = await interaction.channel.messages.fetch({ limit: 3 });
+
+    const removeMessage = messages.find(message =>
+      message.author.bot && message.embeds && message.embeds.length > 0 &&
+      message.embeds[0].description.startsWith(`:wastebasket: | Removed`)
+    );
+
+    if (removeMessage) {
+      try {
+        await removeMessage.delete();
+      } catch (error) {
+        logger.error(`Failed to delete message: ${error}.`);
+      }
+    }
 
     await interaction.deferReply();
 

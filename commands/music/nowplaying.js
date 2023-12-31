@@ -2,6 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const filterManager = require('../../utils/filterManager');
 const formatDuration = require('format-duration');
 const config = require('../../config.json');
+const logger = require('../../utils/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
