@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { checkTopGGVoteAndRespond  } = require('../../utils/topgg');
 const config = require('../../config.json');
 const logger = require('../../utils/logger');
 

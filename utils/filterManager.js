@@ -10,7 +10,7 @@ let filters = {
 };
 
 function toggleFilter(filterName) {
-  if (filters.hasOwnProperty(filterName)) {
+  if (Object.prototype.hasOwnProperty.call(filters, filterName)) {
     filters[filterName] = !filters[filterName];
     return filters[filterName];
   } else {
@@ -19,12 +19,12 @@ function toggleFilter(filterName) {
 }
 
 function getFilterStatus(filterName) {
-  return filters.hasOwnProperty(filterName) ? filters[filterName] : null;
+  return Object.prototype.hasOwnProperty.call(filters, filterName) ? filters[filterName] : null;
 }
 
 function resetFilters() {
   for (const filterName in filters) {
-    if (filters.hasOwnProperty(filterName)) {
+    if (Object.prototype.hasOwnProperty.call(filters, filterName)) {
       filters[filterName] = false;
     }
   }

@@ -24,48 +24,22 @@ module.exports = {
 
     const repeatMode = player.trackRepeat ? 'ON' : 'OFF';
 
-    const bassBoostStatus = filterManager.getFilterStatus('bassBoost');
-    const eightDStatus = filterManager.getFilterStatus('eightd');
-    const karaokeStatus = filterManager.getFilterStatus('karaoke');
-    const nightcoreStatus = filterManager.getFilterStatus('nightcore');
-    const softStatus = filterManager.getFilterStatus('soft');
-    const tremoloStatus = filterManager.getFilterStatus('tremolo');
-    const vaporwaveStatus = filterManager.getFilterStatus('vaporwave');
-    const vibratoStatus = filterManager.getFilterStatus('tremolo');
-
-    const filtersField = [];
-  
-    if (bassBoostStatus) {
-      filtersField.push('Bass Boost');
-    }
-  
-    if (eightDStatus) {
-      filtersField.push('8D');
-    }
-
-    if (karaokeStatus) {
-      filtersField.push('Karaoke');
-    }
-
-    if (nightcoreStatus) {
-      filtersField.push('Nightcore');
-    }
-
-    if (softStatus) {
-      filtersField.push('Soft');
-    }
-
-    if (tremoloStatus) {
-      filtersField.push('Tremolo');
-    }
-
-    if (vaporwaveStatus) {
-      filtersField.push('Vaporwave');
-    }
-
-    if (vibratoStatus) {
-      filtersField.push('Vibrato');
-    }
+    const filtersStatus = [
+      { name: 'Bass Boost', status: filterManager.getFilterStatus('bassBoost') },
+      { name: '8D', status: filterManager.getFilterStatus('eightd') },
+      { name: 'Karaoke', status: filterManager.getFilterStatus('karaoke') },
+      { name: 'Nightcore', status: filterManager.getFilterStatus('nightcore') },
+      { name: 'Soft', status: filterManager.getFilterStatus('soft') },
+      { name: 'Tremolo', status: filterManager.getFilterStatus('tremolo') },
+      { name: 'Vaporwave', status: filterManager.getFilterStatus('vaporwave') },
+      { name: 'Vibrato', status: filterManager.getFilterStatus('vibrato') },
+    ];
+    
+    const filtersField = filtersStatus
+      .filter(({ status }) => status)
+      .map(({ name }) => `${name}`);
+    
+    const filtersFieldText = filtersField.join('\n');
     
     const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
     
@@ -97,7 +71,7 @@ module.exports = {
         { name: 'Volume', value: `**\`${player.volume}%\`**`, inline: true },
         { name: 'Repeat', value: `**\`${repeatMode}\`**`, inline: true },
         { name: 'Autoplay', value: `**\`${player.get('autoplay') ? 'ON' : 'OFF'}\`**`, inline: true },
-        { name: 'Filter(s)', value: `**\`${filtersField.join('\n') || 'NONE'}\`**`, inline: true },
+        { name: 'Filter(s)', value: `**\`${filtersFieldText || 'NONE'}\`**`, inline: true },
       );
 
     interaction.reply({ embeds: [nowPlayingEmbed] });
