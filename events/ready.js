@@ -8,7 +8,7 @@ module.exports = {
 	once: true,
 	execute() {
     client.manager.init(client.user.id);
-    logger.info(`${client.user.tag} is now online.`);
+    logger.info(`${client.user.tag} logged in.`);
 
     /* const poster = AutoPoster(process.env.TOPGG_TOKEN, client);
 
