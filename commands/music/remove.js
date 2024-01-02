@@ -58,7 +58,7 @@ module.exports = {
     const removedSong = player.queue[songNumber - 1];
     player.queue.remove(songNumber - 1);
 
-    const messages = await interaction.channel.messages.fetch({ limit: 3 });
+    const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
 
     const removeMessage = messages.find(message =>
       message.author.bot && message.embeds && message.embeds.length > 0 &&

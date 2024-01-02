@@ -42,13 +42,17 @@ module.exports = {
       });
     }
 
-    const messages = await interaction.channel.messages.fetch({ limit: 3 });
+    // eslint-disable-next-line no-undef
+    player.toggleLowPass(smoothing = 20);
 
-    const filterMessage = messages.find(message => 
-      message.author.bot && 
-      message.embeds.length > 0 && 
-      message.embeds[0].description && 
-      message.embeds[0].description.includes('filter')
+    const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
+
+    const filterMessage = messages.find(message =>
+      message.author.bot &&
+      message.embeds.length > 0 &&
+      message.embeds[0].description &&
+      (message.embeds[0].description.includes('filter is now') ||
+        message.embeds[0].description.includes('Filters have been reset'))
     );
 
     if (filterMessage) {
@@ -59,14 +63,11 @@ module.exports = {
       }
     }
 
-    // eslint-disable-next-line no-undef
-    player.toggleLowPass(smoothing = 20);
-
     await interaction.deferReply();
 
     const filterEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:white_check_mark: | \`Soft\` filter is now ${player.filters.karaoke ? '`enabled`' : '`disabled`'}! Use </nowplaying:1190439304183414877> to see all enabled filters.`)
+      .setDescription(`:white_check_mark: | \`Soft\` filter is now ${player.filters.lowPass ? '`enabled`' : '`disabled`'}! Use </nowplaying:1190439304183414877> to see all enabled filters.`)
       .setTimestamp();
 
     interaction.followUp({

@@ -49,7 +49,7 @@ module.exports = {
     if (members.size === 1 || !voteStopEnabled) {
       player.destroy();
 
-      const messages = await interaction.channel.messages.fetch({ limit: 3 });
+      const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
 
       const stopMessage = messages.find(message =>
         message.author.bot && message.embeds && message.embeds.length > 0 &&
@@ -130,7 +130,7 @@ module.exports = {
       if (thumbsUpCount >= votesRequired) {
         player.destroy();
 
-        const messages = await interaction.channel.messages.fetch({ limit: 3 });
+        const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
 
         const stopMessage = messages.find(message =>
           message.author.bot && message.embeds && message.embeds.length > 0 &&

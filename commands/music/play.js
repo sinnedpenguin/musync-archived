@@ -6,7 +6,7 @@ const logger = require('../../utils/logger');
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('play')
-    .setDescription('Play a song/album/playlist from YouTube, Spotify, Deezer, SoundCloud, or Apple Music.')
+    .setDescription('Play a song/album/playlist from YouTube, Spotify, Deezer, or SoundCloud.')
     .addStringOption((option) =>
       option.setName('query').setDescription('Title/URL/keyword(s)')
       .setRequired(true)
@@ -32,7 +32,7 @@ module.exports = {
 
     let player = interaction.client.manager.players.get(interaction.guild.id);
     
-    let volume = 90;
+    let volume = 80;
     
     const hasVoted = await checkTopGGVote(userId);
     
@@ -40,7 +40,7 @@ module.exports = {
       volume = 100;
       logger.info(`"${userId}" has voted. Setting volume to "100".`);
     } else {
-      logger.warn(`"${userId}" has not voted. Setting default volume to "90".`);
+      logger.warn(`"${userId}" has not voted. Setting default volume to "80".`);
     }
 
     if (!player) {
@@ -54,12 +54,7 @@ module.exports = {
       });
     }
 
-    const results = await interaction.client.manager.search(
-      { 
-        query: query, 
-        source: "yt" || "sp", 
-      }
-    );
+    const results = await interaction.client.manager.search(query);
 
     if (!results.tracks || results.tracks.length === 0) {
       logger.error(`No results found for ${userId}'s query: "${query}".`);

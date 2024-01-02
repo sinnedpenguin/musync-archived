@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const config = require('../../config.json');
+const logger = require('../../utils/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -49,6 +50,23 @@ module.exports = {
     }
 
     player.destroy();
+
+    const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
+
+    const joinMessage = messages.find(message => 
+      message.author.bot && 
+      message.embeds.length > 0 && 
+      message.embeds[0].description && 
+      message.embeds[0].description.startsWith(':white_check_mark: | Joined the voice channel:')
+    );
+
+    if (joinMessage) {
+      try {
+        await joinMessage.delete();
+      } catch (error) {
+        logger.error(`Failed to delete message: ${error}.`);
+      }
+    }
 
     await interaction.deferReply();
 

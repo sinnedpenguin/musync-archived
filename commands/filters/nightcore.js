@@ -41,14 +41,18 @@ module.exports = {
         ephemeral: true 
       });
     }
-    
-    const messages = await interaction.channel.messages.fetch({ limit: 3 });
 
-    const filterMessage = messages.find(message => 
-      message.author.bot && 
-      message.embeds.length > 0 && 
-      message.embeds[0].description && 
-      message.embeds[0].description.includes('filter')
+    // eslint-disable-next-line no-undef
+    player.toggleNightcore(speed = 1.2999999523162842, pitch = 1.2999999523162842, rate=1);
+
+    const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
+
+    const filterMessage = messages.find(message =>
+      message.author.bot &&
+      message.embeds.length > 0 &&
+      message.embeds[0].description &&
+      (message.embeds[0].description.includes('filter is now') ||
+        message.embeds[0].description.includes('Filters have been reset'))
     );
 
     if (filterMessage) {
@@ -58,9 +62,6 @@ module.exports = {
         logger.error(`Failed to delete message: ${error}.`);
       }
     }
-
-    // eslint-disable-next-line no-undef
-    player.toggleNightcore(speed = 1.2999999523162842, pitch = 1.2999999523162842, rate=1);
 
     await interaction.deferReply();
 

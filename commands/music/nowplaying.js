@@ -59,7 +59,8 @@ module.exports = {
       filtersField.push('Vibrato');
     }
     
-    const messages = await interaction.channel.messages.fetch({ limit: 3 });
+    const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
+    
     const nowPlayingMessage = messages.find(message => 
       message.author.bot && 
       message.embeds.length > 0 && 
@@ -81,7 +82,7 @@ module.exports = {
       .setColor(config.embedColor)
       .setTitle('Now Playing')
       .setDescription(
-        `[${currentTrack.sourceName === "spotify" ? `${currentTrackTitle} - ${currentTrack.author}` : `${currentTrackTitle}`} ](${currentTrack.uri})`
+        `[${`${currentTrackTitle}`}](${currentTrack.uri})`
       )
       .setThumbnail(player.queue.current.thumbnail)
       .addFields(

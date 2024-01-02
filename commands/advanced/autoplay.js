@@ -13,9 +13,9 @@ module.exports = {
 
     logger.info(`"${userId}" executed "${commandName}".`);
 
-    /* if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
+    if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
       return;
-    } */
+    }
 
     if (!interaction.member.voice.channel) {
       const voiceChannelEmbed = new EmbedBuilder()
@@ -35,6 +35,23 @@ module.exports = {
     player.set('playedTracks', []);
 
     logger.info(`User: "${userId}" successfully toggled "${commandName}".`);
+
+    const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
+
+    const autoplayMessage = messages.find(message => 
+      message.author.bot && 
+      message.embeds.length > 0 && 
+      message.embeds[0].description && 
+      message.embeds[0].description.startsWith('`:white_check_mark: | \`Autoplay\` is now')
+    );
+
+    if (autoplayMessage) {
+      try {
+        await autoplayMessage.delete();
+      } catch (error) {
+        logger.error(`Failed to delete message: ${error}.`);
+      }
+    }
 
     await interaction.deferReply();
 

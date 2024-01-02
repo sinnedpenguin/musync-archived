@@ -21,9 +21,9 @@ module.exports = {
 
     logger.info(`"${userId}" executed "${commandName}".`);
 
-    /* if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
+    if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
       return;
-    } */
+    }
 
     await interaction.deferReply();
 

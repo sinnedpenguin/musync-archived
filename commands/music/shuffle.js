@@ -50,7 +50,8 @@ module.exports = {
       return interaction.reply({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
     }
 
-    const messages = await interaction.channel.messages.fetch({ limit: 3 });
+    const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
+    
     const shuffleMessage = messages.find(message => 
       message.author.bot && 
       message.embeds.length > 0 && 

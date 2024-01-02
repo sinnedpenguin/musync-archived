@@ -1,7 +1,6 @@
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { Manager } = require('erela.js');
 const Deezer = require("better-erela.js-deezer");
-const { default: AppleMusic } = require('better-erela.js-apple');
 
 const client = new Client({
   intents: [
@@ -34,7 +33,6 @@ client.manager = new Manager({
   position_update_interval: 150,
 	plugins: [
 		new Deezer(),
-		new AppleMusic(),
 	],  
   send: (id, payload) => {
     const guild = client.guilds.cache.get(id);

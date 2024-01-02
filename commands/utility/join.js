@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const config = require('../../config.json');
+const logger = require('../../utils/logger');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -62,6 +63,23 @@ module.exports = {
         .setTimestamp();
 
       interaction.reply({ embeds: [joinErrorEmbed] });
+    }
+
+    const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
+
+    const leaveMessage = messages.find(message => 
+      message.author.bot && 
+      message.embeds.length > 0 && 
+      message.embeds[0].description && 
+      message.embeds[0].description.startsWith(':wave: | Left the voice channel:')
+    );
+
+    if (leaveMessage) {
+      try {
+        await leaveMessage.delete();
+      } catch (error) {
+        logger.error(`Failed to delete message: ${error}.`);
+      }
     }
 
     await interaction.deferReply();

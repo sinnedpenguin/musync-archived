@@ -60,6 +60,23 @@ module.exports = {
 
     player.setVolume(volumeLevel);
 
+    const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
+
+    const volumeMessage = messages.find(message => 
+      message.author.bot && 
+      message.embeds.length > 0 && 
+      message.embeds[0].description && 
+      message.embeds[0].description.startsWith(':sound: | Set volume to')
+    );
+
+    if (volumeMessage) {
+      try {
+        await volumeMessage.delete();
+      } catch (error) {
+        logger.error(`Failed to delete message: ${error}.`);
+      }
+    }
+
     await interaction.deferReply();
     
     const volumeEmbed = new EmbedBuilder()

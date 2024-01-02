@@ -42,13 +42,17 @@ module.exports = {
       });
     }
 
-    const messages = await interaction.channel.messages.fetch({ limit: 3 });
+    // eslint-disable-next-line no-undef
+    player.toggleKaraoke(level = 1, monoLevel = 1, filterBand = 220, filterWidth = 100);
 
-    const filterMessage = messages.find(message => 
-      message.author.bot && 
-      message.embeds.length > 0 && 
-      message.embeds[0].description && 
-      message.embeds[0].description.includes('filter')
+    const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
+
+    const filterMessage = messages.find(message =>
+      message.author.bot &&
+      message.embeds.length > 0 &&
+      message.embeds[0].description &&
+      (message.embeds[0].description.includes('filter is now') ||
+        message.embeds[0].description.includes('Filters have been reset'))
     );
 
     if (filterMessage) {
@@ -58,9 +62,6 @@ module.exports = {
         logger.error(`Failed to delete message: ${error}.`);
       }
     }
-
-    // eslint-disable-next-line no-undef
-    player.toggleKaraoke(level = 1, monoLevel = 1, filterBand = 220, filterWidth = 100);
 
     await interaction.deferReply();
 

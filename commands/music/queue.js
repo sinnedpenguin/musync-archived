@@ -28,7 +28,8 @@ module.exports = {
       });
     }
 
-    const messages = await interaction.channel.messages.fetch({ limit: 3 });
+    const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
+    
     const queueMessage = messages.find(message => 
       message.author.bot && 
       message.embeds.length > 0 && 

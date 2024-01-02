@@ -58,7 +58,7 @@ module.exports = {
 
     player.pause(false);
 
-    const messages = await interaction.channel.messages.fetch({ limit: 3 });
+    const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
 
     const pauseMessage = messages.find(message => 
       message.author.bot && 

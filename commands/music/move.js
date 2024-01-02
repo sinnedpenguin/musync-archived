@@ -67,7 +67,7 @@ module.exports = {
     const movedSong = player.queue.splice(fromIndex, 1)[0];
     player.queue.splice(toIndex, 0, movedSong);
 
-    const messages = await interaction.channel.messages.fetch({ limit: 3 });
+    const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
 
     const moveMessage = messages.find(message =>
       message.author.bot && message.embeds && message.embeds.length > 0 &&

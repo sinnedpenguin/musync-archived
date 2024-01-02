@@ -42,13 +42,16 @@ module.exports = {
       });
     }
 
-    const messages = await interaction.channel.messages.fetch({ limit: 3 });
+    player.resetFilters();
 
-    const filterMessage = messages.find(message => 
-      message.author.bot && 
-      message.embeds.length > 0 && 
-      message.embeds[0].description && 
-      message.embeds[0].description.includes('filter')
+    const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
+
+    const filterMessage = messages.find(message =>
+      message.author.bot &&
+      message.embeds.length > 0 &&
+      message.embeds[0].description &&
+      (message.embeds[0].description.includes('filter is now') ||
+        message.embeds[0].description.includes('Filters have been reset'))
     );
 
     if (filterMessage) {
@@ -58,8 +61,6 @@ module.exports = {
         logger.error(`Failed to delete message: ${error}.`);
       }
     }
-
-    player.resetFilters();
 
     await interaction.deferReply();
 

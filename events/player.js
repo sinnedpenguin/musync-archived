@@ -36,10 +36,12 @@ client.manager.on("trackError", (player, track, payload) => {
 
   const channel = client.channels.cache.get(player.textChannel);
 
-  channel.send({
-    content: `:x: | An error occurred while playing the track. Please try again later. Error: \`${payload.error}\`.`,
-    ephemeral: true
-  });
+  const errorEmbed = new EmbedBuilder()
+    .setColor(config.embedColor)
+    .setDescription(`:x: | An error occurred while playing the track: \`${track.title}\`. Please try again later.`)
+    .setTimestamp();
+
+  channel.send({ embeds: [errorEmbed] });
 });
 
 client.manager.on("trackStuck", (player, track) => {
@@ -47,10 +49,12 @@ client.manager.on("trackStuck", (player, track) => {
 
   const channel = client.channels.cache.get(player.textChannel);
 
-  channel.send({
-    content: `:x: | An error occurred while playing the track: \`${track.title}\`. Please try again later.`,
-    ephemeral: true
-  });
+  const errorEmbed = new EmbedBuilder()
+    .setColor(config.embedColor)
+    .setDescription(`:x: | An error occurred while playing the track: \`${track.title}\`. Please try again later.`)
+    .setTimestamp();
+
+  channel.send({ embeds: [errorEmbed] });
 });
 
 client.manager.on("trackStart", async player => {
@@ -61,7 +65,7 @@ client.manager.on("trackStart", async player => {
 
   const channel = client.channels.cache.get(player.textChannel);
 
-  const messages = await channel.messages.fetch({ limit: 3 });
+  const messages = await channel.messages.fetch({ limit: config.deleteLimit });
   const nowPlayingMessage = messages.find(message => 
     message.author.bot && 
     message.embeds.length > 0 && 
@@ -119,7 +123,7 @@ client.manager.on("trackStart", async player => {
     .setColor(config.embedColor)
     .setTitle('Now Playing')
     .setDescription(
-      `[${currentTrack.sourceName === "spotify" ? `${currentTrackTitle} - ${currentTrack.author}` : `${currentTrackTitle}`} ](${currentTrack.uri})`
+      `[${`${currentTrackTitle}`}](${currentTrack.uri})`
     )
     .setThumbnail(currentTrack.thumbnail)
     .addFields(
@@ -137,7 +141,7 @@ client.manager.on("trackStart", async player => {
 client.manager.on("queueEnd", async (player, track) => {
   const channel = client.channels.cache.get(player.textChannel);
 
-  const messages = await channel.messages.fetch({ limit: 3 });
+  const messages = await channel.messages.fetch({ limit: config.deleteLimit });
 
   const nowPlayingMessage = messages.find(message => 
     message.author.bot && 
@@ -162,20 +166,20 @@ client.manager.on("queueEnd", async (player, track) => {
   
     const hasVoted = await checkTopGGVote(requester);
   
-    /* if (!hasVoted) {
+    if (!hasVoted) {
       const responseEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
         .setDescription(`:warning: | Your \`12 hours\` access to \`autoplay\` has expired. To use \`autoplay\` again, please cast your vote on \`Top.gg\`!`)
         .addFields({
           name: 'Why Vote?',
-          value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`autoplay\`, \`filters\`, \`lyrics\`, \`volume\`, and more—coming soon!\n\n✨ [Vote now!](${config.vote})`,
+          value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`autoplay\`, \`filters\`, \`lyrics\`, \`volume\`, \`100% default volume\`, and more—coming soon!\n\n✨ [Vote now!](${config.vote})`,
         });
       
       await channel.send({
         embeds: [responseEmbed],
       });
       return;
-    }; */
+    };
     
     await autoPlay(player, track);
   } else {
