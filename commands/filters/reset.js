@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { checkTopGGVoteAndRespond  } = require('../../utils/topgg');
+const filterManager = require('../../utils/filterManager');
 const config = require('../../config.json');
 const logger = require('../../utils/logger');
 
@@ -12,9 +13,9 @@ module.exports = {
     const voiceChannel = member.voice.channel;
     const commandName = interaction.commandName;
 
-    /* if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
+    if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
       return;
-    } */
+    }
 
     const player = interaction.client.manager.players.get(interaction.guild.id);
 
@@ -42,7 +43,27 @@ module.exports = {
       });
     }
 
-    player.resetFilters();
+    filterManager.resetFilters();
+    player.setEQ(
+      // eslint-disable-next-line no-undef
+      equalizer = [
+        { band: 0, gain: 0 },
+        { band: 1, gain: 0 },
+        { band: 2, gain: 0 },
+        { band: 3, gain: 0 },
+        { band: 4, gain: 0 },
+        { band: 5, gain: 0 },
+        { band: 6, gain: 0 },
+        { band: 7, gain: 0 },
+        { band: 8, gain: 0 },
+        { band: 9, gain: 0 },
+        { band: 10, gain: 0 },
+        { band: 11, gain: 0 },
+        { band: 12, gain: 0 },
+        { band: 13, gain: 0 },
+        { band: 14, gain: 0 },
+      ]
+    );
 
     const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
 

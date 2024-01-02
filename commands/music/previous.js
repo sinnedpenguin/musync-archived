@@ -54,13 +54,11 @@ module.exports = {
 
     player.stop();
 
-    await interaction.deferReply();
-
     const previousEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(':rewind: | Returned to the </previous:1190439304183414880> song.');
 
-    interaction.followUp({ embeds: [previousEmbed] }).then(msg => {
+    interaction.reply({ embeds: [previousEmbed] }).then(msg => {
       setTimeout(() => msg.delete(), 5000);
     });
   },

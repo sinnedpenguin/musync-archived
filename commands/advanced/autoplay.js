@@ -30,38 +30,27 @@ module.exports = {
 
     let player = interaction.client.manager.players.get(interaction.guild.id);
 
-    player.set('requester', interaction.user.id);
-    player.set('autoplay', !player.get('autoplay'));
-    player.set('playedTracks', []);
+    if (player) {
+      player.set('requester', interaction.user.id);
+      player.set('autoplay', !player.get('autoplay'));
+      player.set('playedTracks', []);
+      
+      logger.info(`User: "${userId}" successfully toggled "${commandName}".`);
 
-    logger.info(`User: "${userId}" successfully toggled "${commandName}".`);
+      const autoPlayEmbed = new EmbedBuilder()
+        .setColor(config.embedColor)
+        .setDescription(`:white_check_mark: | \`Autoplay\` is now \`${player.get('autoplay') ? 'ON' : 'OFF'}\`! Use </nowplaying:1190439304183414877> to see the current status.`)
+        .setTimestamp();
 
-    const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
+      return interaction.reply({
+        embeds: [autoPlayEmbed],
+      });
+    } else {
+      const noSongEmbed = new EmbedBuilder()
+        .setColor(config.embedColor)
+        .setDescription(':x: | There is no song currently playing! Use </play:1190439304183414879> to play a song!')
 
-    const autoplayMessage = messages.find(message => 
-      message.author.bot && 
-      message.embeds.length > 0 && 
-      message.embeds[0].description && 
-      message.embeds[0].description.startsWith('`:white_check_mark: | \`Autoplay\` is now')
-    );
-
-    if (autoplayMessage) {
-      try {
-        await autoplayMessage.delete();
-      } catch (error) {
-        logger.error(`Failed to delete message: ${error}.`);
-      }
+      return interaction.reply({ embeds: [noSongEmbed], ephemeral: true });
     }
-
-    await interaction.deferReply();
-
-    const autoPlayEmbed = new EmbedBuilder()
-      .setColor(config.embedColor)
-      .setDescription(`:white_check_mark: | \`Autoplay\` is now \`${player.get('autoplay') ? 'ON' : 'OFF'}\`! Use </nowplaying:1190439304183414877> to see the current status.`)
-      .setTimestamp();
-
-    return interaction.followUp({
-      embeds: [autoPlayEmbed],
-    });
   }
 };

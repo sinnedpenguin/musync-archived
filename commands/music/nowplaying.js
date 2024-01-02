@@ -23,7 +23,15 @@ module.exports = {
     const currentTrackTitle = currentTrack && currentTrack.title ? currentTrack.title : "NA";
 
     const repeatMode = player.trackRepeat ? 'ON' : 'OFF';
-    const bassBoostStatus = filterManager.getBassBoostStatus();
+
+    const bassBoostStatus = filterManager.getFilterStatus('bassBoost');
+    const eightDStatus = filterManager.getFilterStatus('eightd');
+    const karaokeStatus = filterManager.getFilterStatus('karaoke');
+    const nightcoreStatus = filterManager.getFilterStatus('nightcore');
+    const softStatus = filterManager.getFilterStatus('soft');
+    const tremoloStatus = filterManager.getFilterStatus('tremolo');
+    const vaporwaveStatus = filterManager.getFilterStatus('vaporwave');
+    const vibratoStatus = filterManager.getFilterStatus('tremolo');
 
     const filtersField = [];
   
@@ -31,31 +39,31 @@ module.exports = {
       filtersField.push('Bass Boost');
     }
   
-    if (player.filters.rotating) {
+    if (eightDStatus) {
       filtersField.push('8D');
     }
 
-    if (player.filters.karaoke) {
+    if (karaokeStatus) {
       filtersField.push('Karaoke');
     }
 
-    if (player.filters.nightcore) {
+    if (nightcoreStatus) {
       filtersField.push('Nightcore');
     }
 
-    if (player.filters.lowPass) {
+    if (softStatus) {
       filtersField.push('Soft');
     }
 
-    if (player.filters.tremolo) {
+    if (tremoloStatus) {
       filtersField.push('Tremolo');
     }
 
-    if (player.filters.vaporwave) {
+    if (vaporwaveStatus) {
       filtersField.push('Vaporwave');
     }
 
-    if (player.filters.vibrato) {
+    if (vibratoStatus) {
       filtersField.push('Vibrato');
     }
     
@@ -76,13 +84,11 @@ module.exports = {
       }
     }
 
-    await interaction.deferReply();
-
     const nowPlayingEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setTitle('Now Playing')
       .setDescription(
-        `[${`${currentTrackTitle}`}](${currentTrack.uri})`
+        `[${`${currentTrackTitle}`}](${currentTrack && currentTrack.uri ? currentTrack.uri : ''})`
       )
       .setThumbnail(player.queue.current.thumbnail)
       .addFields(
@@ -94,6 +100,6 @@ module.exports = {
         { name: 'Filter(s)', value: `**\`${filtersField.join('\n') || 'NONE'}\`**`, inline: true },
       );
 
-    interaction.followUp({ embeds: [nowPlayingEmbed] });
+    interaction.reply({ embeds: [nowPlayingEmbed] });
   },
 };

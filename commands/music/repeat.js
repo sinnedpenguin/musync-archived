@@ -89,11 +89,16 @@ module.exports = {
     const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
 
     const oldRepeatModeMessage = messages.find(message =>
-      message.author.bot && message.embeds && message.embeds.length > 0 &&
+      message.author.bot &&
+      message.embeds &&
+      message.embeds.length > 0 &&
+      message.embeds[0].description &&  
       (message.embeds[0].description.startsWith(':repeat: | `Song` repeat') ||
-       message.embeds[0].description.startsWith(':repeat: | `Queue` repeat'))
+       message.embeds[0].description.startsWith(':repeat: | `Queue` repeat') || 
+       message.embeds[0].description.startsWith(':repeat: | Repeat mode is')
+       )
     );
-    
+
     if (oldRepeatModeMessage) {
       try {
         await oldRepeatModeMessage.delete();
@@ -102,22 +107,22 @@ module.exports = {
       }
     }
     
-    let newRepeatModeMessage;
-    
+    let newRepeatModeMessage = '';
+
     if (player.trackRepeat) {
       newRepeatModeMessage = `:repeat: | \`Song\` repeat: ${player.trackRepeat ? '`ON`' : '`OFF`'}. Use </nowplaying:1190439304183414877> to see the current status.`;
-    } else {
+    } else if (player.queueRepeat) {
       newRepeatModeMessage = `:repeat: | \`Queue\` repeat: ${player.queueRepeat ? '`ON`' : '`OFF`'}. Use </queue:1190439304183414881> to see the current status.`;
-    } 
+    } else {
+      newRepeatModeMessage = ':repeat: | Repeat mode is now `OFF`.';
+    }
 
-    await interaction.deferReply();
-    
     const repeatModeEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(`${newRepeatModeMessage}`)
       .setTimestamp();
     
-    interaction.followUp({
+    interaction.reply({
       embeds: [repeatModeEmbed],
     });
   },

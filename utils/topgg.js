@@ -36,7 +36,7 @@ async function checkTopGGVoteAndRespond(interaction, commandName) {
       .setDescription(`:unlock: | Unlock the \`${commandName}\` feature by casting your vote on \`Top.gg\`! Your vote unlocks access for \`12 hours\`!`)
       .addFields({
         name: 'Why Vote?',
-        value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`autoplay\`, \`filters\`, \`lyrics\`, \`volume\`, \`100% default volume\`, and more—coming soon!\n\n✨ [Vote now!](${config.vote})`,
+        value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`autoplay\`, \`filters\`, \`lyrics\`, \`volume\`, \`100% default volume\`, and more—coming soon!\n\n✨ **[Vote now!](${config.vote})**`,
       });
       
     await interaction.followUp({

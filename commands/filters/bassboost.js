@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const filterManager = require('../../utils/filterManager');
 const { checkTopGGVoteAndRespond  } = require('../../utils/topgg');
+const filterManager = require('../../utils/filterManager');
 const config = require('../../config.json');
 const logger = require('../../utils/logger');
 
@@ -43,7 +43,7 @@ module.exports = {
       });
     }
 
-    let bassBoost = filterManager.toggleBassBoost();
+    let bassBoost = filterManager.toggleFilter('bassBoost');
 
     if (bassBoost) {
       player.setEQ(

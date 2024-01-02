@@ -57,7 +57,7 @@ module.exports = {
       message.author.bot && 
       message.embeds.length > 0 && 
       message.embeds[0].description && 
-      message.embeds[0].description.startsWith(':white_check_mark: | Joined the voice channel:')
+      message.embeds[0].description === `:white_check_mark: | Joined the voice channel: \`${voiceChannel.name}\`!`
     );
 
     if (joinMessage) {
@@ -68,13 +68,11 @@ module.exports = {
       }
     }
 
-    await interaction.deferReply();
-
     const leaveEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(`:wave: | Left the voice channel: \`${voiceChannel.name}\`.`)
       .setTimestamp();
 
-    return interaction.followUp({ embeds: [leaveEmbed] });
+    return interaction.reply({ embeds: [leaveEmbed] });
   },
 };

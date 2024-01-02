@@ -47,7 +47,7 @@ module.exports = {
     if (!player.playing) {
       const songAlreadyPausedEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | Current song is already paused!')
+        .setDescription(':x: | Current song is already paused! Do you mean </resume:1190439304183414884>?')
 
       return interaction.reply({
         embeds: [songAlreadyPausedEmbed],
@@ -61,7 +61,8 @@ module.exports = {
 
     const resumeMessage = messages.find(message => 
       message.author.bot && 
-      message.embeds[0].description.startsWith(':arrow_forward: | Resumed the current song!'));
+      message.embeds[0].description === ':arrow_forward: | Resumed the current song! Use </pause:1190439304183414878> to pause.'
+    )
 
     if (resumeMessage) {
       try {
@@ -71,14 +72,12 @@ module.exports = {
       }
     }
 
-    await interaction.deferReply();
-
     const pauseEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(':pause_button: | Paused the current song! Use </resume:1190439304183414884> to resume.')
       .setTimestamp();
 
-    interaction.followUp({
+    interaction.reply({
       embeds: [pauseEmbed],
     });
   },

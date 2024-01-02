@@ -25,13 +25,11 @@ module.exports = {
 
     setVoteStopEnabled(!voteStopEnabled);
 
-    await interaction.deferReply();
-
     const toggleEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(`:white_check_mark: | Voting system for stopping music playback is now ${!voteStopEnabled ? '`ON`' : '`OFF`'}.`)
       .setTimestamp();
 
-    interaction.followUp({ embeds: [toggleEmbed] });
+    interaction.reply({ embeds: [toggleEmbed] });
   },
 };

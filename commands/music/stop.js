@@ -53,7 +53,7 @@ module.exports = {
 
       const stopMessage = messages.find(message =>
         message.author.bot && message.embeds && message.embeds.length > 0 &&
-        message.embeds[0].description.startsWith(`:stop_button: | Stopped music playback and left the voice channel.`)
+        message.embeds[0].description === `:stop_button: | Stopped music playback and left the voice channel.\n\n</votestop:1190439304405733393>: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`
       );
   
       if (stopMessage) {
@@ -67,7 +67,6 @@ module.exports = {
       const stopEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
         .setDescription(`:stop_button: | Stopped music playback and left the voice channel.\n\n</votestop:1190439304405733393>: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
-
         .setTimestamp();
     
       return interaction.reply({ embeds: [stopEmbed] });
@@ -134,7 +133,7 @@ module.exports = {
 
         const stopMessage = messages.find(message =>
           message.author.bot && message.embeds && message.embeds.length > 0 &&
-          message.embeds[0].description === `:stop_button: | Stopped music playback and left the voice channel.\n\n</votestop:1190439304405733393>: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`
+          message.embeds[0].description.startsWith(`:stop_button: | Stopped music playback and left the voice channel.`)
         );
     
         if (stopMessage) {

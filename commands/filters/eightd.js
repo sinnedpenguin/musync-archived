@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { checkTopGGVoteAndRespond  } = require('../../utils/topgg');
+const filterManager = require('../../utils/filterManager');
 const config = require('../../config.json');
 const logger = require('../../utils/logger');
 
@@ -44,6 +45,7 @@ module.exports = {
 
     // eslint-disable-next-line no-undef
     player.toggleRotating(rotationHz = 0.2);
+    filterManager.toggleFilter('eightd');
 
     const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
 

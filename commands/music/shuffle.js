@@ -69,14 +69,12 @@ module.exports = {
     player.queue.shuffle();
     player.queue.isShuffled = true;
 
-    await interaction.deferReply();
-
     const shuffleStatusEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(':twisted_rightwards_arrows: | The queue has been shuffled! Use </queue:1190439304183414881> to see the current order.')
       .setTimestamp();
 
-    interaction.followUp({
+    interaction.reply({
       embeds: [shuffleStatusEmbed],
     });
   },

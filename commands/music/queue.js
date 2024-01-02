@@ -60,8 +60,6 @@ module.exports = {
 
     const nowPlaying = player.queue.current;
 
-    await interaction.deferReply();
-
     const queueEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setTitle(`Queue (${player.queue.length + 1})`)
@@ -83,6 +81,6 @@ module.exports = {
 
     queueEmbed.setFooter({ text: `Page ${page} of ${totalPages}` });
 
-    interaction.followUp({ embeds: [queueEmbed] });
+    interaction.reply({ embeds: [queueEmbed] });
   }
 };

@@ -27,7 +27,7 @@ module.exports = {
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You need to be in a voice channel to move a song from the </queue:1190439304183414881>!')
+        .setDescription(':x: | You need to be in a voice channel to </move:1190439304183414876> a song from the </queue:1190439304183414881>!')
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
@@ -40,7 +40,7 @@ module.exports = {
     if (!sameVoiceChannel || voiceChannel.id !== sameVoiceChannel.id) {
       const sameVoiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You must be in the same voice channel to move a song from the </queue:1190439304183414881>!');
+        .setDescription(':x: | You must be in the same voice channel to </move:1190439304183414876> a song from the </queue:1190439304183414881>!');
   
       return interaction.reply({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
     }
@@ -56,7 +56,7 @@ module.exports = {
     if (currentPosition > player.queue.length || newPosition > player.queue.length || currentPosition < 1 || newPosition < 1) {
       const invalidNumberEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | Invalid song positions. Please enter valid positions in the </queue:1190439304183414881>.');
+        .setDescription(':x: | Invalid song positions. Please enter valid positions in the </queue:1190439304183414881>. Try again: </move:1190439304183414876>.');
 
       return interaction.reply({ embeds: [invalidNumberEmbed], ephemeral: true });
     }
@@ -71,7 +71,7 @@ module.exports = {
 
     const moveMessage = messages.find(message =>
       message.author.bot && message.embeds && message.embeds.length > 0 &&
-      message.embeds[0].description.startsWith(`:arrow_double_up: | Moved`)
+      message.embeds[0].description === `:arrow_double_up: | Moved [${movedSong.title}](${movedSong.uri}) from position ${currentPosition} to ${newPosition}. Use </queue:1190439304183414881> to see the current order.`
     );
 
     if (moveMessage) {
@@ -82,13 +82,11 @@ module.exports = {
       }
     }
 
-    await interaction.deferReply();
-
     const moveEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(`:arrow_double_up: | Moved [${movedSong.title}](${movedSong.uri}) from position ${currentPosition} to ${newPosition}. Use </queue:1190439304183414881> to see the current order.`)
       .setTimestamp();
 
-    interaction.followUp({ embeds: [moveEmbed] });
+    interaction.reply({ embeds: [moveEmbed] });
   },
 };

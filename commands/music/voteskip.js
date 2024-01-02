@@ -25,13 +25,11 @@ module.exports = {
 
     setVoteSkipEnabled(!voteSkipEnabled);
 
-    await interaction.deferReply();
-
     const toggleEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(`:white_check_mark: | Voting system for skipping songs is now ${!voteSkipEnabled ? '`ON`' : '`OFF`'}.`)
       .setTimestamp();
 
-    interaction.followUp({ embeds: [toggleEmbed] });
+    interaction.reply({ embeds: [toggleEmbed] });
   },
 };

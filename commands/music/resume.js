@@ -38,7 +38,7 @@ module.exports = {
     if (player.playing) {
       const songAlreadyPlayingEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | Current song is already playing!')
+        .setDescription(':x: | Current song is already playing! Do you mean </pause:1190439304183414878>?')
 
       return interaction.reply({
         embeds: [songAlreadyPlayingEmbed],
@@ -62,7 +62,8 @@ module.exports = {
 
     const pauseMessage = messages.find(message => 
       message.author.bot && 
-      message.embeds[0].description.startsWith(':pause_button: | Paused the current song!'))
+      message.embeds[0].description === ':pause_button: | Paused the current song! Use </resume:1190439304183414884> to resume.'
+    )
 
     if (pauseMessage) {
       try {
@@ -71,15 +72,13 @@ module.exports = {
         logger.error(`Failed to delete message: ${error}.`);
       }
     }
-
-    await interaction.deferReply();
     
     const resumeEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(':arrow_forward: | Resumed the current song! Use </pause:1190439304183414878> to pause.')
       .setTimestamp();
 
-    interaction.followUp({
+    interaction.reply({
       embeds: [resumeEmbed],
     });
   },

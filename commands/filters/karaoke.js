@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { checkTopGGVoteAndRespond  } = require('../../utils/topgg');
+const filterManager = require('../../utils/filterManager');
 const config = require('../../config.json');
 const logger = require('../../utils/logger');
 
@@ -44,6 +45,7 @@ module.exports = {
 
     // eslint-disable-next-line no-undef
     player.toggleKaraoke(level = 1, monoLevel = 1, filterBand = 220, filterWidth = 100);
+    filterManager.toggleFilter('karaoke');
 
     const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
 

@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { checkTopGGVoteAndRespond  } = require('../../utils/topgg');
+const filterManager = require('../../utils/filterManager');
 const config = require('../../config.json');
 const logger = require('../../utils/logger');
 
@@ -12,9 +13,9 @@ module.exports = {
     const voiceChannel = member.voice.channel;
     const commandName = interaction.commandName;
 
-    /* if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
+    if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
       return;
-    } */
+    }
 
     const player = interaction.client.manager.players.get(interaction.guild.id);
 
@@ -43,6 +44,7 @@ module.exports = {
     }
 
     player.toggleVaporwave();
+    filterManager.toggleFilter('vaporwave');
 
     const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
 

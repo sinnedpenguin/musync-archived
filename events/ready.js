@@ -16,10 +16,17 @@ module.exports = {
       logger.log(`Posted stats to Top.gg | ${stats.serverCount} servers.`);
     }); */
 
+    
+    let totalUsers = 0;
+
+    client.guilds.cache.forEach((guild) => {
+      totalUsers += guild.memberCount;
+    });
+
     let activities = [
       { type: ActivityType.Playing, name: "music ♩ ♪ ♫" },
-      { type: ActivityType.Watching, name: () => `${client.guilds.cache.size} servers.` },
-      { type: ActivityType.Custom, name: () => `Listening with ${client.users.cache.size} users.` },
+      { type: ActivityType.Watching, name: () => `${client.guilds.cache.size.toLocaleString()} servers.` },
+      { type: ActivityType.Custom, name: () => `Listening with ${totalUsers.toLocaleString()} users.` },
     ];
     let i = 0;
 

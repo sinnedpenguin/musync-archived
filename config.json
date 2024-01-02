@@ -6,6 +6,6 @@
   "donate": "https://ko-fi.com/sinnedpenguin",
   "invite": "https://discord.com/oauth2/authorize?client_id=1182507989576458352&permissions=3173376&scope=applications.commands+bot",
   "embedColor": "#F04747",
-  "deleteLimit": 3,
+  "deleteLimit": 2,
   "disconnectTime": 30000
 }

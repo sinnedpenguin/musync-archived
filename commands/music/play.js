@@ -50,7 +50,7 @@ module.exports = {
         textChannel: interaction.channel.id,
         volume: volume,
         selfDeafen: true,
-        instaUpdateFiltersFix: true,
+        // instaUpdateFiltersFix: true,
       });
     }
 
@@ -61,7 +61,7 @@ module.exports = {
 
       const notFoundEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | No results found for the given query.');
+        .setDescription(':x: | No results found for the given query. Please try again: </play:1190439304183414879>.');
 
       return interaction.reply({
         embeds: [notFoundEmbed],
@@ -70,8 +70,6 @@ module.exports = {
     }
 
     results.tracks.forEach((track) => (track.requester = interaction.user.id));
-
-    await interaction.deferReply();
 
     if (results.playlist || results.loadType === 'PLAYLIST') {
       player.queue.add(results.tracks);
@@ -84,7 +82,7 @@ module.exports = {
           { name: 'Added by', value: `<@${interaction.user.id}>`, inline: true }
         );
 
-      interaction.followUp({ embeds: [playlistEmbed] }).then((msg) => {
+      interaction.reply({ embeds: [playlistEmbed] }).then((msg) => {
         setTimeout(() => msg.delete(), 5000);
       });
 
@@ -98,14 +96,14 @@ module.exports = {
       const addedToQueueEmbed = new EmbedBuilder()
         .setTitle('Added to Queue')
         .setDescription(
-          `${results.tracks[0].sourceName === "spotify" ? `${results.tracks[0].title} - ${results.tracks[0].author}` : `${results.tracks[0].title}`}`
+          `${results.tracks[0].title}`
         )
         .setThumbnail(results.tracks[0].thumbnail)
         .addFields(
           { name: 'Added by', value: `<@${interaction.user.id}>`, inline: true }
         );
 
-      interaction.followUp({ embeds: [addedToQueueEmbed] }).then((msg) => {
+      interaction.reply({ embeds: [addedToQueueEmbed] }).then((msg) => {
         setTimeout(() => msg.delete(), 5000);
       });
 

@@ -1,5 +1,4 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { checkTopGGVoteAndRespond  } = require('../../utils/topgg');
 const config = require('../../config.json');
 const logger = require('../../utils/logger');
 
@@ -23,9 +22,9 @@ module.exports = {
 
     logger.info(`"${userId}" executed "${commandName}".`);
 
-    if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
+    /* if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
       return;
-    }
+    } */
 
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
@@ -66,7 +65,7 @@ module.exports = {
       message.author.bot && 
       message.embeds.length > 0 && 
       message.embeds[0].description && 
-      message.embeds[0].description.startsWith(':sound: | Set volume to')
+      message.embeds[0].description === `:sound: | Set volume to \`${volumeLevel}\`. Use </nowplaying:1190439304183414877> to see the current </volume:1190439304405733391>.` 
     );
 
     if (volumeMessage) {
@@ -76,14 +75,12 @@ module.exports = {
         logger.error(`Failed to delete message: ${error}.`);
       }
     }
-
-    await interaction.deferReply();
     
     const volumeEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:sound: | Set volume to \`${volumeLevel}\`. Use </nowplaying:1190439304183414877> to see the current volume.`)
+      .setDescription(`:sound: | Set volume to \`${volumeLevel}\`. Use </nowplaying:1190439304183414877> to see the current </volume:1190439304405733391>.`)
       .setTimestamp();
 
-    interaction.followUp({ embeds: [volumeEmbed] });
+    interaction.reply({ embeds: [volumeEmbed] });
   },
 };
