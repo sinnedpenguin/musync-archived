@@ -22,9 +22,9 @@ module.exports = {
 
     logger.info(`"${userId}" executed "${commandName}".`);
 
-    /* if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
+    if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
       return;
-    } */
+    }
 
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()

@@ -50,7 +50,6 @@ module.exports = {
         textChannel: interaction.channel.id,
         volume: volume,
         selfDeafen: true,
-        // instaUpdateFiltersFix: true,
       });
     }
 
