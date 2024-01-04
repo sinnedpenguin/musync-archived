@@ -21,9 +21,9 @@ module.exports = {
 
     logger.info(`"${userId}" executed "${commandName}".`);
 
-    if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
-      return;
-    }
+    // if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
+    //   return;
+    // }
 
     await interaction.deferReply();
 
@@ -89,7 +89,8 @@ module.exports = {
         });
       }
     }
-  },    
+  }, 
+     
   async autocomplete(interaction) {
     const focusedValue = interaction.options.getFocused();
 

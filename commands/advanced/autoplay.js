@@ -13,9 +13,9 @@ module.exports = {
 
     logger.info(`"${userId}" executed "${commandName}".`);
 
-    if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
-      return;
-    }
+    // if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
+    //   return;
+    // }
 
     if (!interaction.member.voice.channel) {
       const voiceChannelEmbed = new EmbedBuilder()

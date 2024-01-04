@@ -145,22 +145,22 @@ client.manager.on("queueEnd", async (player, track) => {
     const channel = client.channels.cache.get(player.textChannel);
     const requester = player.get("requester");
   
-    const hasVoted = await checkTopGGVote(requester);
+    // const hasVoted = await checkTopGGVote(requester);
   
-    if (!hasVoted) {
-      const responseEmbed = new EmbedBuilder()
-        .setColor(config.embedColor)
-        .setDescription(`:warning: | Your \`12 hours\` access to \`autoplay\` has expired. To use \`autoplay\` again, please cast your vote on \`Top.gg\`!`)
-        .addFields({
-          name: 'Why Vote?',
-          value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`autoplay\`, \`filters\`, \`lyrics\`, \`volume\`, \`100% default volume\`, and more—coming soon!\n\n✨ **[Vote now!](${config.vote})**`,
-        });
+    // if (!hasVoted) {
+    //   const responseEmbed = new EmbedBuilder()
+    //     .setColor(config.embedColor)
+    //     .setDescription(`:warning: | Your \`12 hours\` access to \`autoplay\` has expired. To use \`autoplay\` again, please cast your vote on \`Top.gg\`!`)
+    //     .addFields({
+    //       name: 'Why Vote?',
+    //       value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`autoplay\`, \`filters\`, \`lyrics\`, \`volume\`, \`100% default volume\`, and more—coming soon!\n\n✨ **[Vote now!](${config.vote})**`,
+    //     });
       
-      await channel.send({
-        embeds: [responseEmbed],
-      });
-      return;
-    }
+    //   await channel.send({
+    //     embeds: [responseEmbed],
+    //   });
+    //   return;
+    // }
     
     await autoPlay(player, track);
   } else {

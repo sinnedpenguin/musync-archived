@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { checkTopGGVoteAndRespond  } = require('../../utils/topgg');
+const volumeManager = require('../../utils/volumeManager');
 const config = require('../../config.json');
 const logger = require('../../utils/logger');
 
@@ -23,9 +24,9 @@ module.exports = {
 
     logger.info(`"${userId}" executed "${commandName}".`);
 
-    if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
-      return;
-    }
+    // if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
+    //   return;
+    // }
 
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
@@ -59,6 +60,8 @@ module.exports = {
     }
 
     player.setVolume(volumeLevel);
+    player.volume = volumeLevel; 
+    volumeManager.setHasUserSetVolume(true);
 
     const messages = await interaction.channel.messages.fetch({ limit: config.deleteLimit });
 

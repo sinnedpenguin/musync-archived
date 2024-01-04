@@ -13,9 +13,9 @@ module.exports = {
     const voiceChannel = member.voice.channel;
     const commandName = interaction.commandName;
     
-    if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
-      return;
-    }
+    // if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
+    //   return;
+    // }
 
     const player = interaction.client.manager.players.get(interaction.guild.id);
 

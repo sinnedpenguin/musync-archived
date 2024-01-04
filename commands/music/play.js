@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { checkTopGGVote } = require('../../utils/topgg')
+const { checkTopGGVote } = require('../../utils/topgg');
+const volumeManager = require('../../utils/volumeManager');
 const config = require('../../config.json');
 const logger = require('../../utils/logger');
 
@@ -32,17 +33,18 @@ module.exports = {
 
     let player = interaction.client.manager.players.get(interaction.guild.id);
     
-    let volume = 80;
-    
     const hasVoted = await checkTopGGVote(userId);
-    
-    if (hasVoted) {
-      volume = 100;
+
+    if (hasVoted && !volumeManager.getHasUserSetVolume()) {
+      volumeManager.setVolume(100);
       logger.info(`"${userId}" has voted. Setting volume to "100".`);
     } else {
+      volumeManager.setVolume(80);
       logger.warn(`"${userId}" has not voted. Setting default volume to "80".`);
     }
-
+    
+    const volume = volumeManager.getVolume();
+    
     if (!player) {
       player = interaction.client.manager.create({
         guild: interaction.guild.id,
@@ -112,6 +114,7 @@ module.exports = {
       }
     }
   },
+
   async autocomplete(interaction) {
     const focusedValue = interaction.options.getFocused();
 

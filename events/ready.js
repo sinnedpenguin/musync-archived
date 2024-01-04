@@ -16,7 +16,6 @@ module.exports = {
       logger.log(`Posted stats to Top.gg | ${stats.serverCount} servers.`);
     }); */
 
-    
     let totalUsers = 0;
 
     client.guilds.cache.forEach((guild) => {
