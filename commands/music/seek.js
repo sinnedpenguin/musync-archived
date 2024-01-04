@@ -18,7 +18,7 @@ module.exports = {
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You need to be in a voice channel to </seek:1190439304405733386> in the track!');
+        .setDescription(`:x: | You need to be in a voice channel to ${config.commands.seek} in the song!`);
       return interaction.reply({
         embeds: [voiceChannelEmbed],
         ephemeral: true,
@@ -30,7 +30,7 @@ module.exports = {
     if (!sameVoiceChannel || voiceChannel.id !== sameVoiceChannel.id) {
       const sameVoiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You must be in the same voice channel to </seek:1190439304405733386> in the track!');
+        .setDescription(`:x: | You must be in the same voice channel to ${config.commands.seek} in the song!`);
   
       return interaction.reply({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
     }
@@ -53,7 +53,7 @@ module.exports = {
     if (isNaN(timeInSeconds) || timeInSeconds < 0 || timeInSeconds >= player.queue.current.duration) {
       const invalidTimeEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | Invalid time format or time exceeds the duration. Please try again: </seek:1190439304405733386>.');
+        .setDescription(`:x: | Invalid time format or time exceeds the duration. Please try again: ${config.commands.seek}.`);
       return interaction.reply({
         embeds: [invalidTimeEmbed],
         ephemeral: true,
@@ -76,7 +76,7 @@ module.exports = {
     } else {
       const invalidTimeEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | Invalid time format or time exceeds the duration. Please try again: </seek:1190439304405733386>.');
+        .setDescription(`:x: | Invalid time format or time exceeds the duration. Please try again: ${config.commands.seek}.`);
       return interaction.reply({
         embeds: [invalidTimeEmbed],
         ephemeral: true,

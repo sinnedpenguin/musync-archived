@@ -24,14 +24,14 @@ module.exports = {
 
     logger.info(`"${userId}" executed "${commandName}".`);
 
-    // if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
-    //   return;
-    // }
+    if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
+      return;
+    }
 
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You need to be in a voice channel to adjust the volume of music playback!')
+        .setDescription(`:x: | You need to be in a voice channel to adjust the ${config.commands.volume} of music playback!`)
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
@@ -44,7 +44,7 @@ module.exports = {
     if (!sameVoiceChannel || voiceChannel.id !== sameVoiceChannel.id) {
       const sameVoiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You must be in the same voice channel to adjust the volume of music playback!');
+        .setDescription(`:x: | You must be in the same voice channel to adjust the ${config.commands.volume} of music playback!`);
   
       return interaction.followUp({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
     }
@@ -54,7 +54,7 @@ module.exports = {
     if (!player || !player.queue || !player.queue.current) {
       const noSongsEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | No songs are currently playing!');
+        .setDescription(`:x: | No songs are currently playing! Use ${config.commands.play} to play a song!`);
 
       return interaction.reply({ embeds: [noSongsEmbed], ephemeral: true });
     }
@@ -69,7 +69,7 @@ module.exports = {
       message.author.bot && 
       message.embeds.length > 0 && 
       message.embeds[0].description && 
-      message.embeds[0].description === `:sound: | Set volume to \`${volumeLevel}\`. Use </nowplaying:1190439304183414877> to see the current </volume:1190439304405733391>.` 
+      message.embeds[0].description === `:sound: | Set volume to \`${volumeLevel}\`. Use ${config.commands.nowplaying} to see the current ${config.commands.volume}.` 
     );
 
     if (volumeMessage) {
@@ -82,7 +82,7 @@ module.exports = {
     
     const volumeEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:sound: | Set volume to \`${volumeLevel}\`. Use </nowplaying:1190439304183414877> to see the current </volume:1190439304405733391>.`)
+      .setDescription(`:sound: | Set volume to \`${volumeLevel}\`. Use ${config.commands.nowplaying} to see the current ${config.commands.volume}.`)
       .setTimestamp();
 
     interaction.reply({ embeds: [volumeEmbed] });

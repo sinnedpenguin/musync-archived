@@ -13,7 +13,7 @@ module.exports = {
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You need to be in a voice channel to </pause:1190439304183414878> a song!')
+        .setDescription(`:x: | You need to be in a voice channel to ${config.commands.pause} a song!`)
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
@@ -26,7 +26,7 @@ module.exports = {
     if (!sameVoiceChannel || voiceChannel.id !== sameVoiceChannel.id) {
       const sameVoiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You must be in the same voice channel to </pause:1190439304183414878> a song!');
+        .setDescription(`:x: | You must be in the same voice channel to ${config.commands.pause} a song!`);
   
       return interaction.reply({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
     }
@@ -36,7 +36,7 @@ module.exports = {
     if (!player || !player.queue.current) {
       const noSongPlayingEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | There is no song currently playing! Use </play:1190439304183414879> to play a song!')
+        .setDescription(`:x: | There is no song currently playing! Use ${config.commands.play} to play a song!`)
 
       return interaction.reply({
         embeds: [noSongPlayingEmbed],
@@ -47,7 +47,7 @@ module.exports = {
     if (!player.playing) {
       const songAlreadyPausedEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | Current song is already paused! Do you mean </resume:1190439304183414884>?')
+        .setDescription(`:x: | Current song is already paused! Do you mean ${config.commands.resume}?`)
 
       return interaction.reply({
         embeds: [songAlreadyPausedEmbed],
@@ -61,7 +61,7 @@ module.exports = {
 
     const resumeMessage = messages.find(message => 
       message.author.bot && 
-      message.embeds[0].description === ':arrow_forward: | Resumed the current song! Use </pause:1190439304183414878> to pause.'
+      message.embeds[0].description === `:arrow_forward: | Resumed the current song! Use ${config.commands.pause} to pause.`
     )
 
     if (resumeMessage) {
@@ -74,7 +74,7 @@ module.exports = {
 
     const pauseEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(':pause_button: | Paused the current song! Use </resume:1190439304183414884> to resume.')
+      .setDescription(`:arrow_forward: | Resumed the current song! Use ${config.commands.pause} to pause.`)
       .setTimestamp();
 
     interaction.reply({

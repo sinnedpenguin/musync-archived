@@ -7,5 +7,28 @@
   "invite": "https://discord.com/oauth2/authorize?client_id=1182507989576458352&permissions=3173376&scope=applications.commands+bot",
   "embedColor": "#F04747",
   "deleteLimit": 2,
-  "disconnectTime": 30000
+  "disconnectTime": 30000,
+  "commands": {
+    "autoplay": "</autoplay:1192276155508727929>",
+    "lyrics": "</lyrics:1190439303931772979>",
+    "play": "</play:1182508574719619117>",
+    "nowplaying": "</nowplaying:1182508574719619114>",
+    "move": "</move:1182508574719619113>",
+    "queue": "</queue:1182508574719619119>",
+    "pause": "</pause:1182508574719619115>",
+    "resume": "</resume:1182508574891589672>",
+    "join": "</join:1184290062674964573>",
+    "previous": "</previous:1182508574719619118>",
+    "remove": "</remove:1182508574719619120>",
+    "repeat": "</repeat:1182508574719619121>",
+    "seek": "</seek:1190439304405733386>",
+    "shuffle": "</shuffle:1182508574891589673>",
+    "skip": "</skip:1182508574891589674>",
+    "voteskip": "</voteskip:1185087129173360700>",
+    "skipto": "</skipto:1182508574891589675>",
+    "stop": "</stop:1182508574891589676>",
+    "votestop": "</votestop:1185087129173360701>",
+    "volume": "</volume:1182508574891589677>",
+    "leave": "</leave:1184290062674964574>"
+  }
 }

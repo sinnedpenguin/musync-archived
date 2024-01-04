@@ -20,7 +20,7 @@ module.exports = {
     if (!player || !player.queue || !player.queue.current) {
       const noSongsEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | No songs are currently playing! Use </play:1190439304183414879> to add songs!');
+        .setDescription(`:x: | No songs are currently playing! Use ${config.commands.play} to add songs!`);
 
       return interaction.reply({
         embeds: [noSongsEmbed],

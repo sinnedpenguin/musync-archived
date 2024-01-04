@@ -19,7 +19,7 @@ module.exports = {
     if (songNumber < 1) {
       const invalidNumberEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:x: | Invalid song number. Please enter a valid song number.\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        .setDescription(`:x: | Invalid song number. Please enter a valid song number.\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
 
       return interaction.reply({ embeds: [invalidNumberEmbed], ephemeral: true });
     }
@@ -29,7 +29,7 @@ module.exports = {
     if (!player || !player.queue || !player.queue.current) {
       const noSongsEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | No songs are currently playing!')
+        .setDescription(`:x: | No songs are currently playing! Use ${config.commands.play} to play a song!`)
 
       return interaction.reply({ embeds: [noSongsEmbed], ephemeral: true });
     }
@@ -40,7 +40,7 @@ module.exports = {
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:x: | You need to be in a voice channel to </skipto:1190439304405733389> a specific song!\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        .setDescription(`:x: | You need to be in a voice channel to ${config.commands.skipto} a specific song!\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
@@ -53,7 +53,7 @@ module.exports = {
     if (!sameVoiceChannel || voiceChannel.id !== sameVoiceChannel.id) {
       const sameVoiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:x: | You must be in the same voice channel to </skipto:1190439304405733389> to a specific song!\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        .setDescription(`:x: | You must be in the same voice channel to ${config.commands.skipto} to a specific song!\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
   
       return interaction.reply({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
     }
@@ -68,7 +68,7 @@ module.exports = {
 
       const skipEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:fast_forward: | Skipped to ${songNumber}. [${targetSong.title}](${targetSong.uri}).\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        .setDescription(`:fast_forward: | Skipped to ${songNumber}. [${targetSong.title}](${targetSong.uri}).\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
         .setTimestamp();
 
       return interaction.reply({ embeds: [skipEmbed] }).then(msg => {
@@ -79,7 +79,7 @@ module.exports = {
     if (songNumber > player.queue.length) {
       const maxQueueEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:x: | There ${player.queue.length === 1 ? 'is' : 'are'} only ${player.queue.length} song${player.queue.length !== 1 ? 's' : ''} in the queue.\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        .setDescription(`:x: | There ${player.queue.length === 1 ? 'is' : 'are'} only ${player.queue.length} song${player.queue.length !== 1 ? 's' : ''} in the queue.\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
 
       return interaction.reply({ embeds: [maxQueueEmbed], ephemeral: true });
     }
@@ -90,7 +90,7 @@ module.exports = {
 
     const skipToRequestEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:warning: | <@${interaction.user.id}> requested to </skipto:1190439304405733389> song number ${songNumber}.\n\nTotal votes required: \`${votesRequired}\`\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+      .setDescription(`:warning: | <@${interaction.user.id}> requested to ${config.commands.skipto} song number ${songNumber}.\n\nTotal votes required: \`${votesRequired}\`\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
       .setTimestamp();
 
     const message = await interaction.reply({ embeds: [skipToRequestEmbed], fetchReply: true });
@@ -100,7 +100,7 @@ module.exports = {
     const updateCountdown = () => {
       timeRemaining--;
       if (timeRemaining > 0) {
-        skipToRequestEmbed.setDescription(`:warning: | <@${interaction.user.id}> requested to </skipto:1190439304405733389> song number ${songNumber}.\n\nTotal votes required: \`${votesRequired}\`\nTime remaining: \`${timeRemaining}s\`\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        skipToRequestEmbed.setDescription(`:warning: | <@${interaction.user.id}> requested to ${config.commands.skipto} song number ${songNumber}.\n\nTotal votes required: \`${votesRequired}\`\nTime remaining: \`${timeRemaining}s\`\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
         message.edit({ embeds: [skipToRequestEmbed] });
       } else {
         clearInterval(countdownInterval);
@@ -144,7 +144,7 @@ module.exports = {
 
         const skiptoEmbed = new EmbedBuilder()
           .setColor(config.embedColor)
-          .setDescription(`:fast_forward: | Skipped to ${songNumber}. [${targetSong.title}](${targetSong.uri}).\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+          .setDescription(`:fast_forward: | Skipped to ${songNumber}. [${targetSong.title}](${targetSong.uri}).\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
           .setTimestamp();
 
         interaction.editReply({ embeds: [skiptoEmbed] }).then(msg => {
@@ -153,7 +153,7 @@ module.exports = {
       } else {
         const notEnoughVotesEmbed = new EmbedBuilder()
           .setColor(config.embedColor)
-          .setDescription(`:x: | Not enough votes to </skipto:1190439304405733389> the specified song.\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+          .setDescription(`:x: | Not enough votes to ${config.commands.skipto} the specified song.\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
           
         interaction.editReply({ embeds: [notEnoughVotesEmbed] });
       }

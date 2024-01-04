@@ -14,7 +14,7 @@ module.exports = {
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You need to be in a voice channel to shuffle the </queue:1190439304183414881>!');
+        .setDescription(`:x: | You need to be in a voice channel to ${config.commands.shuffle} the ${config.commands.queue}!`);
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
@@ -35,7 +35,7 @@ module.exports = {
     if (player.queue.length < 2) {
       const notEnoughSongsEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(":x: | There's not enough songs in the </queue:1190439304183414881> to shuffle!")
+        .setDescription(`:x: | There's not enough songs in the ${config.commands.queue} to ${config.commands.shuffle}!`)
 
       return interaction.reply({ embeds: [notEnoughSongsEmbed] , ephemeral: true });
     }
@@ -45,7 +45,7 @@ module.exports = {
     if (!sameVoiceChannel || voiceChannel.id !== sameVoiceChannel.id) {
       const sameVoiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You must be in the same voice channel to shuffle the </queue:1190439304183414881>!');
+        .setDescription(`:x: | You must be in the same voice channel to shuffle the ${config.commands.queue}!`);
   
       return interaction.reply({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
     }
@@ -55,7 +55,7 @@ module.exports = {
     const shuffleMessage = messages.find(message => 
       message.author.bot && 
       message.embeds.length > 0 && 
-      message.embeds[0].description === ':twisted_rightwards_arrows: | The queue has been shuffled! Use </queue:1190439304183414881> to see the current order.'
+      message.embeds[0].description === `:twisted_rightwards_arrows: | The queue has been shuffled! Use ${config.commands.queue} to see the current order.`
     );
   
     if (shuffleMessage) {
@@ -71,7 +71,7 @@ module.exports = {
 
     const shuffleStatusEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(':twisted_rightwards_arrows: | The queue has been shuffled! Use </queue:1190439304183414881> to see the current order.')
+      .setDescription(`:twisted_rightwards_arrows: | The queue has been shuffled! Use ${config.commands.queue} to see the current order.`)
       .setTimestamp();
 
     interaction.reply({

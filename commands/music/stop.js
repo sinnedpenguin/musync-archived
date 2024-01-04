@@ -16,7 +16,7 @@ module.exports = {
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:x: | You need to be in a voice channel to </stop:1190439304405733390> the music playback!\n\n</votestop:1190439304405733393>: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        .setDescription(`:x: | You need to be in a voice channel to ${config.commands.stop} the music playback!\n\n${config.commands.votestop}: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
@@ -29,7 +29,7 @@ module.exports = {
     if (!sameVoiceChannel || voiceChannel.id !== sameVoiceChannel.id) {
       const sameVoiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:x: | You must be in the same voice channel to </stop:1190439304405733390> the music playback!\n\n</votestop:1190439304405733393>: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        .setDescription(`:x: | You must be in the same voice channel to ${config.commands.stop} the music playback!\n\n${config.commands.votestop}: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
   
       return interaction.reply({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
     }
@@ -39,7 +39,7 @@ module.exports = {
     if (!player || !player.queue.current) {
       const noSongEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:x: | There is no music playback to </stop:1190439304405733390>!\n\n</votestop:1190439304405733393>: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        .setDescription(`:x: | There is no music playback to ${config.commands.stop}!\n\n${config.commands.votestop}: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
 
       return interaction.reply({ embeds: [noSongEmbed], ephemeral: true });
     }
@@ -53,7 +53,7 @@ module.exports = {
 
       const stopMessage = messages.find(message =>
         message.author.bot && message.embeds && message.embeds.length > 0 &&
-        message.embeds[0].description === `:stop_button: | Stopped music playback and left the voice channel.\n\n</votestop:1190439304405733393>: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`
+        message.embeds[0].description === `:stop_button: | Stopped music playback and left the voice channel.\n\n${config.commands.votestop}: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`
       );
   
       if (stopMessage) {
@@ -66,7 +66,7 @@ module.exports = {
     
       const stopEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:stop_button: | Stopped music playback and left the voice channel.\n\n</votestop:1190439304405733393>: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        .setDescription(`:stop_button: | Stopped music playback and left the voice channel.\n\n${config.commands.votestop}: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
         .setTimestamp();
     
       return interaction.reply({ embeds: [stopEmbed] });
@@ -78,7 +78,7 @@ module.exports = {
 
     const stopRequestEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:warning: | <@${interaction.user.id}> requested to </stop:1190439304405733390> the music playback.\n\nTotal votes required: \`${votesRequired}\`\n\n</votestop:1190439304405733393>: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
+      .setDescription(`:warning: | <@${interaction.user.id}> requested to ${config.commands.stop} the music playback.\n\nTotal votes required: \`${votesRequired}\`\n\n${config.commands.votestop}: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
       .setTimestamp();
     
     const message = await interaction.reply({ embeds: [stopRequestEmbed], fetchReply: true });
@@ -88,7 +88,7 @@ module.exports = {
     const updateCountdown = () => {
       timeRemaining--;
       if (timeRemaining > 0) {
-        stopRequestEmbed.setDescription(`:warning: | <@${interaction.user.id}> requested to </stop:1190439304405733390> the music playback.\n\nTotal votes required: \`${votesRequired}\`\nTime remaining: \`${timeRemaining}s\`\n\n</votestop:1190439304405733393>: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        stopRequestEmbed.setDescription(`:warning: | <@${interaction.user.id}> requested to ${config.commands.stop} the music playback.\n\nTotal votes required: \`${votesRequired}\`\nTime remaining: \`${timeRemaining}s\`\n\n${config.commands.votestop}: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
         message.edit({ embeds: [stopRequestEmbed] });
       } else {
         clearInterval(countdownInterval); 
@@ -146,14 +146,14 @@ module.exports = {
     
         const stopEmbed = new EmbedBuilder()
           .setColor(config.embedColor)
-          .setDescription(`:stop_button: | Stopped music playback and left the voice channel.\n\n</votestop:1190439304405733393>: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
+          .setDescription(`:stop_button: | Stopped music playback and left the voice channel.\n\n${config.commands.votestop}: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
           .setTimestamp();
     
         interaction.editReply({ embeds: [stopEmbed] });
       } else {
         const notEnoughVotesEmbed = new EmbedBuilder()
           .setColor(config.embedColor)
-          .setDescription(`:x: | Not enough votes to </stop:1190439304405733390> the music playback.\n\n</votestop:1190439304405733393>: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
+          .setDescription(`:x: | Not enough votes to ${config.commands.stop} the music playback.\n\n${config.commands.votestop}: ${voteStopEnabled ? `\`ON\`` : `\`OFF\``}.`)
     
         interaction.editReply({ embeds: [notEnoughVotesEmbed] });
       }

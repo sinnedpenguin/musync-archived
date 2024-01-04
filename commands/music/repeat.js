@@ -22,7 +22,7 @@ module.exports = {
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You need to be in a voice channel to repeat a song/queue!');
+        .setDescription(`:x: | You need to be in a voice channel to ${config.commands.repeat} a song/queue!`);
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
@@ -35,7 +35,7 @@ module.exports = {
     if (!sameVoiceChannel || voiceChannel.id !== sameVoiceChannel.id) {
       const sameVoiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You must be in the same voice channel to repeat a song/queue!');
+        .setDescription(`:x: | You must be in the same voice channel to ${config.commands.repeat} a song/queue!`);
   
       return interaction.reply({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
     }
@@ -45,7 +45,7 @@ module.exports = {
     if (!player || !player.queue.current) {
       const noSongQueueEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | There is no song/queue currently playing!');
+        .setDescription(`:x: | There is no song/queue currently playing! Use ${config.commands.play} to play a song!`);
 
       return interaction.reply({
         embeds: [noSongQueueEmbed],
@@ -110,9 +110,9 @@ module.exports = {
     let newRepeatModeMessage = '';
 
     if (player.trackRepeat) {
-      newRepeatModeMessage = `:repeat: | \`Song\` repeat: ${player.trackRepeat ? '`ON`' : '`OFF`'}. Use </nowplaying:1190439304183414877> to see the current status.`;
+      newRepeatModeMessage = `:repeat: | \`Song\` repeat: ${player.trackRepeat ? '`ON`' : '`OFF`'}. Use ${config.commands.nowplaying} to see the current status.`;
     } else if (player.queueRepeat) {
-      newRepeatModeMessage = `:repeat: | \`Queue\` repeat: ${player.queueRepeat ? '`ON`' : '`OFF`'}. Use </queue:1190439304183414881> to see the current status.`;
+      newRepeatModeMessage = `:repeat: | \`Queue\` repeat: ${player.queueRepeat ? '`ON`' : '`OFF`'}. Use ${config.commands.queue} to see the current status.`;
     } else {
       newRepeatModeMessage = ':repeat: | Repeat mode is now `OFF`.';
     }

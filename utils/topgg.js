@@ -26,8 +26,6 @@ async function checkTopGGVoteAndRespond(interaction, commandName) {
 
   const hasVoted = await checkTopGGVote(userId);
 
-  await interaction.deferReply();
-
   if (!hasVoted) {
     logger.error(`"${userId}" has not voted to use "${commandName}".`);
       
@@ -39,7 +37,7 @@ async function checkTopGGVoteAndRespond(interaction, commandName) {
         value: `Voting supports the growth of \`Musync!\`. Your contribution is valuable, and as a token of our appreciation, enjoy exclusive access to premium features like \`autoplay\`, \`filters\`, \`lyrics\`, \`volume\`, \`100% default volume\`, and more—coming soon!\n\n✨ **[Vote now!](${config.vote})**`,
       });
       
-    await interaction.followUp({
+    await interaction.reply({
       embeds: [responseEmbed],
     });
     return false;

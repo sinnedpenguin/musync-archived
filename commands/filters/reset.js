@@ -13,16 +13,16 @@ module.exports = {
     const voiceChannel = member.voice.channel;
     const commandName = interaction.commandName;
 
-    // if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
-    //   return;
-    // }
+    if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
+      return;
+    }
 
     const player = interaction.client.manager.players.get(interaction.guild.id);
 
     if (!player || !player.queue.current) {
       const noSongPlayingEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | There is no song currently playing! Use </play:1190439304183414879> to play a song!')
+        .setDescription(`:x: | There is no song currently playing! Use ${config.commands.play} to play a song!`)
 
       return interaction.reply({
         embeds: [noSongPlayingEmbed],
@@ -87,7 +87,7 @@ module.exports = {
 
     const resetFiltersEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(':white_check_mark: | Filters have been reset. Use </nowplaying:1190439304183414877> to see the changes.')
+      .setDescription(`:white_check_mark: | Filters have been reset. Use ${config.commands.nowplaying} to see the changes.`)
       .setTimestamp();
 
     interaction.followUp({

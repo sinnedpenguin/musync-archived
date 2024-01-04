@@ -13,14 +13,14 @@ module.exports = {
 
     logger.info(`"${userId}" executed "${commandName}".`);
 
-    // if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
-    //   return;
-    // }
+    if (!await checkTopGGVoteAndRespond(interaction, commandName)) {
+      return;
+    }
 
     if (!interaction.member.voice.channel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You need to be in a voice channel to toggle `Autoplay`! Please try again: </autoplay:1190439303931772978>.');
+        .setDescription(`:x: | You need to be in a voice channel to toggle \`Autoplay\`! Please try again: ${config.commands.autoplay}.`);
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
@@ -39,7 +39,7 @@ module.exports = {
 
       const autoPlayEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:white_check_mark: | \`Autoplay\` is now \`${player.get('autoplay') ? 'ON' : 'OFF'}\`! Use </nowplaying:1190439304183414877> to see the current status.`)
+        .setDescription(`:white_check_mark: | \`Autoplay\` is now \`${player.get('autoplay') ? 'ON' : 'OFF'}\`! Use ${config.commands.nowplaying} to see the current status.`)
         .setTimestamp();
 
       return interaction.reply({
@@ -48,7 +48,7 @@ module.exports = {
     } else {
       const noSongEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | There is no song currently playing! Use </play:1190439304183414879> to play a song!')
+        .setDescription(`:x: | There is no song currently playing! Use ${config.commands.play} to play a song!`)
 
       return interaction.reply({ embeds: [noSongEmbed], ephemeral: true });
     }

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, PermissionsBitField } = require('discord.js');
 const config = require('../../config.json');
 const logger = require('../../utils/logger');
 
@@ -13,10 +13,23 @@ module.exports = {
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You need to be in a voice channel to use this command! Please try again: </join:1190439304405733395>.')
+        .setDescription(`:x: | You need to be in a voice channel to use this command! Please try again: ${config.commands.join}.`)
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
+        ephemeral: true,
+      });
+    }
+
+    const channelPermissions = interaction.member.voice.channel.permissionsFor(interaction.client.user);
+
+    if (!channelPermissions || !channelPermissions.has(PermissionsBitField.Flags.Connect)) {
+      const noPermissionEmbed = new EmbedBuilder()
+        .setColor(config.embedColor)
+        .setDescription(`:x: | No permission to join the voice channel! Please check permissions and try again: ${config.commands.join}.`);
+    
+      return interaction.reply({
+        embeds: [noPermissionEmbed],
         ephemeral: true,
       });
     }
@@ -26,7 +39,7 @@ module.exports = {
     if (sameVoiceChannel && voiceChannel.id === sameVoiceChannel.id) {
       const alreadyInChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | Already in the voice channel! Do you mean </leave:1190439304607055942>?')
+        .setDescription(`:x: | Already in the voice channel! Do you mean ${config.commands.leave}?`)
   
       return interaction.reply({ embeds: [alreadyInChannelEmbed], ephemeral: true });
     }
@@ -59,7 +72,7 @@ module.exports = {
       console.error(error);
       const joinErrorEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:x: | Error joining to the voice channel. Please try again: </join:1190439304405733395>.`)
+        .setDescription(`:x: | Error joining to the voice channel. Please try again: ${config.commands.join}.`)
         .setTimestamp();
 
       interaction.reply({ embeds: [joinErrorEmbed] });

@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, PermissionsBitField } = require('discord.js');
 const { checkTopGGVote } = require('../../utils/topgg');
 const volumeManager = require('../../utils/volumeManager');
 const config = require('../../config.json');
@@ -23,10 +23,23 @@ module.exports = {
     if (!interaction.member.voice.channel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You need to be in a voice channel to play a song! Please try again: </play:1190439304183414879>.');
+        .setDescription(`:x: | You need to be in a voice channel to play a song! Please try again: ${config.commands.play}.`);
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
+        ephemeral: true,
+      });
+    }
+
+    const channelPermissions = interaction.member.voice.channel.permissionsFor(interaction.client.user);
+
+    if (!channelPermissions || !channelPermissions.has(PermissionsBitField.Flags.Connect)) {
+      const noPermissionEmbed = new EmbedBuilder()
+        .setColor(config.embedColor)
+        .setDescription(`:x: | No permission to join the voice channel! Please check permissions and try again: ${config.commands.join}.`);
+    
+      return interaction.reply({
+        embeds: [noPermissionEmbed],
         ephemeral: true,
       });
     }
@@ -62,7 +75,7 @@ module.exports = {
 
       const notFoundEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | No results found for the given query. Please try again: </play:1190439304183414879>.');
+        .setDescription(`:x: | No results found for the given query. Please try again: ${config.commands.play}.`);
 
       return interaction.reply({
         embeds: [notFoundEmbed],

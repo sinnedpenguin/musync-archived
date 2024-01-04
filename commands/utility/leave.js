@@ -13,7 +13,7 @@ module.exports = {
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You need to be in a voice channel to use this command! Please try again: </leave:1190439304607055942>.')
+        .setDescription(`:x: | You need to be in a voice channel to use this command! Please try again: ${config.commands.leave}.`)
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
@@ -26,7 +26,7 @@ module.exports = {
     if (!player) {
       const notInChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | Currently not in a voice channel. Do you mean </join:1190439304405733395>?')
+        .setDescription(`:x: | Currently not in a voice channel. Do you mean ${config.commands.join}?`)
 
       return interaction.reply({ embeds: [notInChannelEmbed], ephemeral: true });
     }
@@ -36,7 +36,7 @@ module.exports = {
     if (!sameVoiceChannel || voiceChannel.id !== sameVoiceChannel.id) {
       const sameVoiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(':x: | You must be in the same voice channel to use this command! Please try again: </leave:1190439304607055942>.');
+        .setDescription(`:x: | You must be in the same voice channel to use this command! Please try again: ${config.commands.leave}.`);
   
       return interaction.reply({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
     }

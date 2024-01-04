@@ -15,7 +15,7 @@ module.exports = {
     if (!voiceChannel) {
       const voiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:x: | You need to be in a voice channel to </skip:1190439304405733388> a song!\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        .setDescription(`:x: | You need to be in a voice channel to ${config.commands.skip} a song!\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
 
       return interaction.reply({
         embeds: [voiceChannelEmbed],
@@ -28,7 +28,7 @@ module.exports = {
     if (!sameVoiceChannel || voiceChannel.id !== sameVoiceChannel.id) {
       const sameVoiceChannelEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:x: | You must be in the same voice channel to </skip:1190439304405733388> a song!\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        .setDescription(`:x: | You must be in the same voice channel to ${config.commands.skip} a song!\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
   
       return interaction.reply({ embeds: [sameVoiceChannelEmbed], ephemeral: true });
     }
@@ -38,7 +38,7 @@ module.exports = {
     if (!player || !player.queue.current) {
       const noSongEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:x: | There is no song playing to </skip:1190439304405733388>!\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        .setDescription(`:x: | There is no song playing to ${config.commands.skip}!\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
 
       return interaction.reply({ embeds: [noSongEmbed], ephemeral: true });
     }
@@ -53,7 +53,7 @@ module.exports = {
 
         const skipEmbed = new EmbedBuilder()
           .setColor(config.embedColor)
-          .setDescription(`:fast_forward: | Skipped to the next song.\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+          .setDescription(`:fast_forward: | Skipped to the next song.\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
           .setTimestamp();
 
         return interaction.reply({ embeds: [skipEmbed] }).then(msg => {
@@ -70,7 +70,7 @@ module.exports = {
 
         const skipEmbed = new EmbedBuilder()
           .setColor(config.embedColor)
-          .setDescription(`:fast_forward: | Skipped to the next song.\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+          .setDescription(`:fast_forward: | Skipped to the next song.\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
           .setTimestamp();
 
         return interaction.reply({ embeds: [skipEmbed] }).then(msg => {
@@ -84,7 +84,7 @@ module.exports = {
 
       const skipRequestEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:warning: | <@${interaction.user.id}> requested to </skip:1190439304405733388> the current song.\n\nTotal votes required: \`${votesRequired}\`\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        .setDescription(`:warning: | <@${interaction.user.id}> requested to ${config.commands.skip} the current song.\n\nTotal votes required: \`${votesRequired}\`\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
         .setTimestamp();
 
       const message = await interaction.reply({ embeds: [skipRequestEmbed], fetchReply: true });
@@ -94,7 +94,7 @@ module.exports = {
       const updateCountdown = () => {
         timeRemaining--;
         if (timeRemaining > 0) {
-          skipRequestEmbed.setDescription(`:warning: | <@${interaction.user.id}> requested to </skip:1190439304405733388> the current song.\n\nTotal votes required: \`${votesRequired}\`\nTime remaining: \`${timeRemaining}s\`\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+          skipRequestEmbed.setDescription(`:warning: | <@${interaction.user.id}> requested to ${config.commands.skip} the current song.\n\nTotal votes required: \`${votesRequired}\`\nTime remaining: \`${timeRemaining}s\`\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
           message.edit({ embeds: [skipRequestEmbed] });
         } else {
           clearInterval(countdownInterval);
@@ -137,7 +137,7 @@ module.exports = {
 
           const skipEmbed = new EmbedBuilder()
             .setColor(config.embedColor)
-            .setDescription(`:fast_forward: | Skipped to the next song.\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+            .setDescription(`:fast_forward: | Skipped to the next song.\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
             .setTimestamp();
 
           interaction.editReply({ embeds: [skipEmbed] }).then(msg => {
@@ -146,7 +146,7 @@ module.exports = {
         } else {
           const notEnoughVotesEmbed = new EmbedBuilder()
             .setColor(config.embedColor)
-            .setDescription(`:x: | Not enough votes to </skip:1190439304405733388> the current song.\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+            .setDescription(`:x: | Not enough votes to ${config.commands.skip} the current song.\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
 
           interaction.editReply({ embeds: [notEnoughVotesEmbed] });
         }
@@ -156,7 +156,7 @@ module.exports = {
     } else {
       const noMoreSongsEmbed = new EmbedBuilder()
         .setColor(config.embedColor)
-        .setDescription(`:x: | There are no more songs to </skip:1190439304405733388> to.\n\n</voteskip:1190439304405733392>: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
+        .setDescription(`:x: | There are no more songs to ${config.commands.skip} to.\n\n${config.commands.voteskip}: ${voteSkipEnabled ? `\`ON\`` : `\`OFF\``}.`)
 
       interaction.reply({ embeds: [noMoreSongsEmbed], ephemeral: true });
     }
