@@ -65,21 +65,21 @@ client.manager.on("trackStart", async player => {
 
   const channel = client.channels.cache.get(player.textChannel);
 
-  const messages = await channel.messages.fetch({ limit: config.deleteLimit });
-  const nowPlayingMessage = messages.find(message => 
-    message.author.bot && 
-    message.embeds.length > 0 && 
-    message.embeds[0].title && 
-    message.embeds[0].title === 'Now Playing'
-  );
+  // const messages = await channel.messages.fetch({ limit: config.deleteLimit });
+  // const nowPlayingMessage = messages.find(message => 
+  //   message.author.bot && 
+  //   message.embeds.length > 0 && 
+  //   message.embeds[0].title && 
+  //   message.embeds[0].title === 'Now Playing'
+  // );
 
-  if (nowPlayingMessage) {
-    try {
-      await nowPlayingMessage.delete();
-    } catch (error) {
-      logger.error(`Failed to delete message: ${error}`);
-    }
-  }
+  // if (nowPlayingMessage) {
+  //   try {
+  //     await nowPlayingMessage.delete();
+  //   } catch (error) {
+  //     logger.error(`Failed to delete message: ${error}`);
+  //   }
+  // }
 
   const repeatMode = player.trackRepeat ? 'ON' : 'OFF';
 
@@ -120,24 +120,24 @@ client.manager.on("trackStart", async player => {
 });
 
 client.manager.on("queueEnd", async (player, track) => {
-  const channel = client.channels.cache.get(player.textChannel);
+  // const channel = client.channels.cache.get(player.textChannel);
 
-  const messages = await channel.messages.fetch({ limit: config.deleteLimit });
+  // const messages = await channel.messages.fetch({ limit: config.deleteLimit });
 
-  const nowPlayingMessage = messages.find(message => 
-    message.author.bot && 
-    message.embeds.length > 0 && 
-    message.embeds[0].title && 
-    message.embeds[0].title === 'Now Playing'
-  );
+  // const nowPlayingMessage = messages.find(message => 
+  //   message.author.bot && 
+  //   message.embeds.length > 0 && 
+  //   message.embeds[0].title && 
+  //   message.embeds[0].title === 'Now Playing'
+  // );
 
-  if (nowPlayingMessage) {
-    try {
-    await nowPlayingMessage.delete();
-    } catch (error) {
-      logger.error(`Failed to delete message: ${error}`);
-    }
-  }
+  // if (nowPlayingMessage) {
+  //   try {
+  //   await nowPlayingMessage.delete();
+  //   } catch (error) {
+  //     logger.error(`Failed to delete message: ${error}`);
+  //   }
+  // }
 
   const autoplayEnabled = player.get("autoplay");
 

@@ -11,7 +11,7 @@ module.exports = {
     .addStringOption((option) =>
       option.setName('query').setDescription('Title/URL/keyword(s)')
       .setRequired(true)
-      .setAutocomplete(true)
+      //.setAutocomplete(true)
     ),
   async execute(interaction) {
     const userId = interaction.user.id;
@@ -128,17 +128,17 @@ module.exports = {
     }
   },
 
-  async autocomplete(interaction) {
-    const focusedValue = interaction.options.getFocused();
+  // async autocomplete(interaction) {
+  //   const focusedValue = interaction.options.getFocused();
 
-    const results = await interaction.client.manager.search(focusedValue);
-    const tracks = results.tracks.slice(0, 5);
+  //   const results = await interaction.client.manager.search(focusedValue);
+  //   const tracks = results.tracks.slice(0, 5);
 
-    const options = tracks.map(track => ({
-      name: track.title,
-      value: track.uri,
-    }));
+  //   const options = tracks.map(track => ({
+  //     name: track.title,
+  //     value: track.uri,
+  //   }));
 
-    await interaction.respond(options);
-  }
+  //   await interaction.respond(options);
+  // }
 };

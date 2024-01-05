@@ -12,7 +12,7 @@ module.exports = {
     .addStringOption((option) =>
       option.setName('query').setDescription('(Title) (Artist). Ex. Circles Post Malone.')
       .setRequired(true)
-      .setAutocomplete(true)
+      //.setAutocomplete(true)
     ),
   async execute(interaction) {
     const userId = interaction.user.id;
@@ -34,7 +34,7 @@ module.exports = {
         const bestResult = searchResults[0];
         const detailedResult = await rlyrics.find(bestResult.url);
     
-        const lyricsContent = detailedResult.lyrics || ':x: | Lyrics not available. Please try again: </lyrics:1190439303931772979>.';
+        const lyricsContent = detailedResult.lyrics || `:x: | Lyrics not available. Please try again: ${config.commands.lyrics}.`;
     
         const chunks = lyricsContent.match(/[\s\S]{1,2000}/g) || [];
     
@@ -89,17 +89,17 @@ module.exports = {
     }
   }, 
      
-  async autocomplete(interaction) {
-    const focusedValue = interaction.options.getFocused();
+  // async autocomplete(interaction) {
+  //   const focusedValue = interaction.options.getFocused();
 
-    const searchResults = await rlyrics.search(encodeURIComponent(focusedValue));
-    const tracks = searchResults.slice(0, 5);
+  //   const searchResults = await rlyrics.search(encodeURIComponent(focusedValue));
+  //   const tracks = searchResults.slice(0, 5);
 
-    const options = tracks.map(track => ({
-      name: `${track.title} - ${track.artist}`,
-      value: `${track.title} - ${track.artist}`,
-    }));
+  //   const options = tracks.map(track => ({
+  //     name: `${track.title} - ${track.artist}`,
+  //     value: `${track.title} - ${track.artist}`,
+  //   }));
 
-    await interaction.respond(options);
-  },
+  //   await interaction.respond(options);
+  // },
 };
