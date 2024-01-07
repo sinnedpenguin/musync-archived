@@ -74,7 +74,7 @@ module.exports = {
 
     const pauseEmbed = new EmbedBuilder()
       .setColor(config.embedColor)
-      .setDescription(`:arrow_forward: | Resumed the current song! Use ${config.commands.pause} to pause.`)
+      .setDescription(`:arrow_forward: | Paused the current song! Use ${config.commands.resume} to resume.`)
       .setTimestamp();
 
     interaction.reply({
